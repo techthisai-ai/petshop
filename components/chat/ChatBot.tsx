@@ -87,7 +87,7 @@ const qaDatabase: Record<string, { answer: string; quickReplies?: string[] }> = 
 
   // Store & Contact
   'store location': { 
-    answer: "Visit us! 📍\n\n🏪 BowPaw Pet Store\nMain Road, Tirunelveli\nTamil Nadu - 627001\n\n⏰ Open: 9 AM - 9 PM (All days)\n📞 1800-123-PAWS (Toll free)",
+    answer: "Visit us! 📍\n\n🏪 Rainbow Aqua and Pets\nNo. 45, South Car Street\nTirunelveli Town - 627006\nTamil Nadu, India\n\n⏰ Open: 9 AM - 9 PM (All days)\n📞 1800-123-PAWS (Toll free)",
     quickReplies: ['Get directions', 'Store hours', 'Call store']
   },
   'contact': { 
@@ -522,4 +522,3 @@ export default function ChatBot() {
     </>
   )
 }
-

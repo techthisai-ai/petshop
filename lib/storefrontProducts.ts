@@ -74,6 +74,9 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
     specifications: {
       ...(product.sku ? { SKU: product.sku } : {}),
       ...(product.stock !== undefined ? { Stock: String(product.stock) } : {}),
+      ...(product.weightValue
+        ? { Weight: `${product.weightValue}${product.weightUnit ?? "g"}` }
+        : {}),
       Category: category,
       ...(subcategory ? { Subcategory: subcategory } : {}),
     },
@@ -83,7 +86,7 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
     inStock: product.inStock ?? Number(product.stock) > 0,
     isNew: product.isNew,
     isFeatured: product.isFeatured,
-    rating: 4.6,
+    rating: 5,
     reviews: 0,
     tags: [FIREBASE_PRODUCT_TAG, product.name, product.category, product.subcategory, product.sku]
       .filter(Boolean)

@@ -25,7 +25,7 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Our Store",
-    details: ["Rainbow Aqua and Pets", "Shop No. 42, Fish Market Road", "Andheri West, Mumbai 400058"],
+    details: ["Rainbow Aqua and Pets", "No. 45, South Car Street", "Tirunelveli Town - 627006, Tamil Nadu"],
     color: "text-coral",
   },
   {
@@ -281,5 +281,4 @@ export default function ContactPage() {
     </main>
   );
 }
-
 

@@ -199,7 +199,7 @@ const getBotResponse = (query: string): { message: string; products?: typeof bir
   // Contact
   if (lowerQuery.includes('contact') || lowerQuery.includes('phone') || lowerQuery.includes('call') || lowerQuery.includes('support')) {
     return {
-      message: "📞 **Contact Us:**\n\n📱 Phone: +91 98765 43210\n📧 Email: hello@rainbowaqua.in\n📍 Location: Chennai, Tamil Nadu\n⏰ Hours: 9 AM - 8 PM (Mon-Sat)\n\nWe're always happy to help!"
+      message: "📞 **Contact Us:**\n\n📱 Phone: +91 98765 43210\n📧 Email: hello@rainbowaqua.in\n📍 Location: No. 45, South Car Street, Tirunelveli Town - 627006, Tamil Nadu\n⏰ Hours: 9 AM - 8 PM (Mon-Sat)\n\nWe're always happy to help!"
     }
   }
 

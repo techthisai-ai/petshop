@@ -126,8 +126,8 @@ export default function CheckoutPage() {
       clearLegacyCart();
 
       toast({
-        title: 'Order Placed Successfully! 🎉',
-        description: 'Your order has been confirmed.',
+        title: 'Order Placed Successfully!',
+        description: 'Your order is waiting for admin approval.',
       });
 
       router.push('/account/orders');

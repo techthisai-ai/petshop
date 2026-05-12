@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   BarChart3,
   Bell,
@@ -39,7 +39,8 @@ const statusConfig: Record<Order["status"], { color: string; icon: any; bgColor:
   cancelled: { color: "text-red-700", icon: XCircle, bgColor: "bg-red-100" },
 };
 
-const displayStatus = (status: string) => status.charAt(0).toUpperCase() + status.slice(1);
+const displayStatus = (status: string) =>
+  status === "confirmed" ? "Approved" : status.charAt(0).toUpperCase() + status.slice(1);
 const formatDate = (value: string) => new Date(value).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
 const formatTime = (value: string) => new Date(value).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
 const formatAddress = (order: Order) =>
@@ -58,6 +59,7 @@ export default function OrdersPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<"all" | Order["status"]>("all");
+  const [expandedStatus, setExpandedStatus] = useState<Order["status"] | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { currentUser, logout, getAllOrders, updateOrderStatus, fetchAdminData } = useAuthStore();
 
@@ -99,6 +101,31 @@ export default function OrdersPage() {
     setSelectedOrder(null);
   };
 
+  const toggleStatusCard = (status: Order["status"]) => {
+    setExpandedStatus((current) => current === status ? null : status);
+    setSelectedStatus(status);
+  };
+
+  const expandedOrders = expandedStatus
+    ? orders.filter((order) => order.status === expandedStatus)
+    : [];
+
+  const renderNextAction = (order: Order) => {
+    if (order.status === "pending") {
+      return <Button size="sm" onClick={() => saveStatus(order.id, "confirmed")} className="bg-cyan-600 hover:bg-cyan-700">Approve</Button>;
+    }
+    if (order.status === "confirmed") {
+      return <Button size="sm" onClick={() => saveStatus(order.id, "processing")} className="bg-yellow-500 hover:bg-yellow-600">Mark Processing</Button>;
+    }
+    if (order.status === "processing") {
+      return <Button size="sm" onClick={() => saveStatus(order.id, "shipped")} className="bg-blue-500 hover:bg-blue-600">Mark Shipped</Button>;
+    }
+    if (order.status === "shipped") {
+      return <Button size="sm" onClick={() => saveStatus(order.id, "delivered")} className="bg-green-500 hover:bg-green-600">Mark Delivered</Button>;
+    }
+    return null;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-slate-900 transition-transform duration-300 lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
@@ -122,7 +149,7 @@ export default function OrdersPage() {
             <Link href="/owner/orders" className="flex items-center gap-3 rounded-lg bg-white/10 px-3 py-2.5 text-white">
               <ShoppingCart className="h-5 w-5" />
               Orders
-              <Badge className="ml-auto bg-red-500 text-xs text-white">{orders.filter((order) => order.status === "pending" || order.status === "processing").length}</Badge>
+              <Badge className="ml-auto bg-red-500 text-xs text-white">{orders.filter((order) => order.status === "pending").length}</Badge>
             </Link>
             <Link href="/owner/customers" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-white/70 hover:bg-white/5 hover:text-white"><Users className="h-5 w-5" />Customers</Link>
             <Link href="/owner/reports" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-white/70 hover:bg-white/5 hover:text-white"><BarChart3 className="h-5 w-5" />Reports</Link>
@@ -150,17 +177,67 @@ export default function OrdersPage() {
         </header>
 
         <main className="p-4 sm:p-6">
-          <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {(["pending", "processing", "shipped", "delivered"] as Order["status"][]).map((status) => (
-              <div key={status} className="rounded-xl border bg-white p-4 shadow-sm">
+          <div className="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {(["pending", "confirmed", "processing", "shipped"] as Order["status"][]).map((status) => (
+              <button
+                key={status}
+                type="button"
+                onClick={() => toggleStatusCard(status)}
+                aria-expanded={expandedStatus === status}
+                className={`rounded-xl border bg-white p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+                  expandedStatus === status ? "border-cyan-500 ring-2 ring-cyan-100" : ""
+                }`}
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-500">{displayStatus(status)}</span>
                   <span className={`h-2 w-2 rounded-full ${statusConfig[status].bgColor}`} />
                 </div>
                 <p className="mt-1 text-2xl font-bold text-gray-800">{orders.filter((order) => order.status === status).length}</p>
-              </div>
+              </button>
             ))}
           </div>
+
+          <AnimatePresence mode="wait">
+            {expandedStatus && (
+              <motion.div
+                key={expandedStatus}
+                initial={{ opacity: 0, height: 0, y: -8 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+                className="mb-6 overflow-hidden rounded-xl border bg-white shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-3 border-b bg-gray-50 px-4 py-3">
+                  <div>
+                    <h2 className="font-semibold text-gray-800">{displayStatus(expandedStatus)} Orders</h2>
+                    <p className="text-sm text-gray-500">{expandedOrders.length} order{expandedOrders.length === 1 ? "" : "s"} in this status</p>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => setExpandedStatus(null)}>
+                    Close
+                  </Button>
+                </div>
+
+                <div className="divide-y">
+                  {expandedOrders.slice(0, 6).map((order) => (
+                    <div key={order.id} className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-gray-800">{order.userName}</p>
+                        <p className="truncate text-xs text-gray-500">{order.id} - Rs. {order.total.toLocaleString("en-IN")}</p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {renderNextAction(order)}
+                        <Button variant="outline" size="sm" onClick={() => setSelectedOrder(order)}>View</Button>
+                      </div>
+                    </div>
+                  ))}
+
+                  {expandedOrders.length === 0 && (
+                    <p className="px-4 py-8 text-center text-sm text-gray-400">No {displayStatus(expandedStatus).toLowerCase()} orders.</p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="mb-6 rounded-xl border bg-white p-4 shadow-sm">
             <div className="flex flex-col gap-4 sm:flex-row">
@@ -210,7 +287,14 @@ export default function OrdersPage() {
                         </td>
                         <td className="hidden px-4 py-3 text-sm text-gray-500 sm:table-cell">{formatDate(order.createdAt)}</td>
                         <td className="px-4 py-3 text-right">
-                          <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(order)}>View</Button>
+                          <div className="flex justify-end gap-2">
+                            {order.status === "pending" && (
+                              <Button size="sm" onClick={() => saveStatus(order.id, "confirmed")} className="bg-cyan-600 hover:bg-cyan-700">
+                                Approve
+                              </Button>
+                            )}
+                            <Button variant="ghost" size="sm" onClick={() => setSelectedOrder(order)}>View</Button>
+                          </div>
                         </td>
                       </tr>
                     );
@@ -271,7 +355,8 @@ export default function OrdersPage() {
                 <div>
                   <h3 className="mb-2 text-sm font-medium text-gray-800">Update Status</h3>
                   <div className="flex flex-wrap gap-2">
-                    {selectedOrder.status === "pending" && <Button size="sm" onClick={() => saveStatus(selectedOrder.id, "processing")} className="bg-yellow-500 hover:bg-yellow-600">Mark Processing</Button>}
+                    {selectedOrder.status === "pending" && <Button size="sm" onClick={() => saveStatus(selectedOrder.id, "confirmed")} className="bg-cyan-600 hover:bg-cyan-700">Approve Order</Button>}
+                    {selectedOrder.status === "confirmed" && <Button size="sm" onClick={() => saveStatus(selectedOrder.id, "processing")} className="bg-yellow-500 hover:bg-yellow-600">Mark Processing</Button>}
                     {selectedOrder.status === "processing" && <Button size="sm" onClick={() => saveStatus(selectedOrder.id, "shipped")} className="bg-blue-500 hover:bg-blue-600">Mark Shipped</Button>}
                     {selectedOrder.status === "shipped" && <Button size="sm" onClick={() => saveStatus(selectedOrder.id, "delivered")} className="bg-green-500 hover:bg-green-600">Mark Delivered</Button>}
                     <Button size="sm" variant="outline" onClick={() => saveStatus(selectedOrder.id, "cancelled")} className="border-red-500 text-red-500 hover:bg-red-50">Cancel Order</Button>

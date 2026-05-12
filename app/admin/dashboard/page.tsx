@@ -52,8 +52,7 @@ export default function AdminDashboard() {
   // Stats
   const totalRevenue = orders.filter(o => o.paymentStatus === 'paid').reduce((sum, o) => sum + o.total, 0)
   const pendingOrders = orders.filter(o => o.status === 'pending').length
-  const processingOrders = orders.filter(o => o.status === 'processing').length
-  const openNotifications = pendingOrders + processingOrders
+  const openNotifications = pendingOrders
   const totalOrders = orders.length
   const activeUsers = users.filter(u => u.role === 'user').length
 
@@ -68,7 +67,7 @@ export default function AdminDashboard() {
   const getStatusColor = (status: Order['status']) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-700'
-      case 'confirmed': return 'bg-blue-100 text-blue-700'
+      case 'confirmed': return 'bg-cyan-100 text-cyan-700'
       case 'processing': return 'bg-purple-100 text-purple-700'
       case 'shipped': return 'bg-indigo-100 text-indigo-700'
       case 'delivered': return 'bg-green-100 text-green-700'
@@ -88,6 +87,8 @@ export default function AdminDashboard() {
       default: return null
     }
   }
+
+  const displayStatus = (status: Order['status']) => status === 'confirmed' ? 'approved' : status
 
   const handleLogout = () => {
     logout()
@@ -295,7 +296,7 @@ export default function AdminDashboard() {
                         <td className="px-6 py-4">
                           <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
                             {getStatusIcon(order.status)}
-                            {order.status}
+                            {displayStatus(order.status)}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-500">
@@ -338,7 +339,7 @@ export default function AdminDashboard() {
                 >
                   <option value="all">All Status</option>
                   <option value="pending">Pending</option>
-                  <option value="confirmed">Confirmed</option>
+                  <option value="confirmed">Approved</option>
                   <option value="processing">Processing</option>
                   <option value="shipped">Shipped</option>
                   <option value="delivered">Delivered</option>
@@ -388,7 +389,7 @@ export default function AdminDashboard() {
                             className={`px-2 py-1 rounded-lg text-xs font-medium border-0 ${getStatusColor(order.status)}`}
                           >
                             <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
+                            <option value="confirmed">Approved</option>
                             <option value="processing">Processing</option>
                             <option value="shipped">Shipped</option>
                             <option value="delivered">Delivered</option>
@@ -396,12 +397,22 @@ export default function AdminDashboard() {
                           </select>
                         </td>
                         <td className="px-6 py-4">
-                          <button
-                            onClick={() => setSelectedOrder(order)}
-                            className="text-primary-500 hover:text-primary-600"
-                          >
-                            <Eye className="w-5 h-5" />
-                          </button>
+                          <div className="flex items-center gap-3">
+                            {order.status === 'pending' && (
+                              <button
+                                onClick={() => updateOrderStatus(order.id, 'confirmed')}
+                                className="rounded-lg bg-cyan-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-cyan-700"
+                              >
+                                Approve
+                              </button>
+                            )}
+                            <button
+                              onClick={() => setSelectedOrder(order)}
+                              className="text-primary-500 hover:text-primary-600"
+                            >
+                              <Eye className="w-5 h-5" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

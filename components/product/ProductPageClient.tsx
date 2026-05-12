@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCartStore, useWishlistStore } from "@/lib/store";
 import { birdsAndFishProducts } from "@/lib/birdsAndFishData";
+import { testimonials } from "@/lib/data";
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import type { Product } from "@/lib/store";
 import { formatPrice, getDiscountPercentage } from "@/lib/utils";
@@ -75,6 +76,11 @@ const getFallbackSpecifications = (product: Product) => {
     "Quality Check": "Inspected by Rainbow Aqua before dispatch",
     "Care Support": "Care guidance available from our support team",
   };
+};
+
+const getSpecValue = (specs: Record<string, string>, keys: string[]) => {
+  const foundKey = keys.find((key) => specs[key]);
+  return foundKey ? specs[foundKey] : undefined;
 };
 
 interface ProductPageClientProps {
@@ -139,6 +145,17 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
     product.specifications && Object.keys(product.specifications).length > 0
       ? product.specifications
       : getFallbackSpecifications(product);
+  const displayRating = Number.isFinite(product.rating) && product.rating > 0 ? product.rating : 5;
+  const filledStars = Math.min(5, Math.max(0, Math.round(displayRating)));
+  const productType = product.subcategory ? titleCase(product.subcategory) : titleCase(product.category);
+  const productWeight = getSpecValue(displaySpecifications, ["Weight", "Quantity", "Net Weight", "Pack Size"]);
+  const productSize = getSpecValue(displaySpecifications, ["Size", "Flow Rate", "Power"]);
+  const productReviews = testimonials
+    .filter((review) =>
+      review.product.toLowerCase().includes(product.name.toLowerCase()) ||
+      product.name.toLowerCase().includes(review.product.toLowerCase())
+    );
+  const displayReviews = (productReviews.length > 0 ? productReviews : testimonials).slice(0, 3);
 
   const handleAddToCart = () => {
     addItem(product, quantity, selectedVariants);
@@ -212,6 +229,12 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
                     <Badge variant="secondary">🧬 CLONED</Badge>
                   )}
                 </div>
+                <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+                  <Badge className="bg-white/90 text-gray-800 hover:bg-white">Type: {productType}</Badge>
+                  {productWeight && (
+                    <Badge className="bg-white/90 text-gray-800 hover:bg-white">Weight: {productWeight}</Badge>
+                  )}
+                </div>
                 <button
                   onClick={handleWishlist}
                   className="absolute top-4 right-4 p-3 bg-white/90 rounded-full shadow-lg hover:bg-white transition-colors"
@@ -267,19 +290,24 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
                         <Star
                           key={i}
                           className={`w-5 h-5 ${
-                            i < Math.floor(product.rating)
+                            i < filledStars
                               ? "fill-yellow-400 text-yellow-400"
                               : "text-gray-300"
                           }`}
                         />
                       ))}
                       <span className="ml-2 text-sm text-muted-foreground">
-                        ({product.reviews} reviews)
+                        ({product.reviews ?? 0} reviews)
                       </span>
                     </div>
                     <button className="text-muted-foreground hover:text-primary">
                       <Share2 className="w-5 h-5" />
                     </button>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <Badge variant="outline">Type: {productType}</Badge>
+                    {productWeight && <Badge variant="outline">Weight: {productWeight}</Badge>}
+                    {productSize && <Badge variant="outline">Size: {productSize}</Badge>}
                   </div>
                 </div>
 
@@ -403,6 +431,7 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
               <TabsTrigger value="description">Description</TabsTrigger>
               <TabsTrigger value="care">Care Guide</TabsTrigger>
               <TabsTrigger value="specs">Specifications</TabsTrigger>
+              <TabsTrigger value="reviews">Reviews</TabsTrigger>
               <TabsTrigger value="shipping">Shipping</TabsTrigger>
             </TabsList>
             
@@ -445,6 +474,43 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
                     </div>
                   ))}
                 </dl>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="reviews" className="mt-6">
+              <div className="bg-card rounded-xl p-6 border">
+                <h3 className="text-xl font-semibold mb-4">Customer Reviews</h3>
+                <div className="grid gap-4 md:grid-cols-3">
+                  {displayReviews.map((review) => (
+                    <article key={review.id} className="rounded-lg border bg-background p-4">
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={review.avatar}
+                          alt={review.name}
+                          width={40}
+                          height={40}
+                          className="h-10 w-10 rounded-full object-cover"
+                        />
+                        <div>
+                          <p className="font-medium">{review.name}</p>
+                          <p className="text-xs text-muted-foreground">{review.location}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex items-center gap-1">
+                        {[...Array(5)].map((_, index) => (
+                          <Star
+                            key={index}
+                            className={`h-4 w-4 ${
+                              index < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="mt-3 text-sm text-muted-foreground">&quot;{review.text}&quot;</p>
+                      <p className="mt-3 text-xs font-medium text-secondary">{review.product}</p>
+                    </article>
+                  ))}
+                </div>
               </div>
             </TabsContent>
 

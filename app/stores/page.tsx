@@ -21,15 +21,15 @@ import { Input } from "@/components/ui/input";
 
 const stores = [
   {
-    name: "Rainbow Aqua and Pets - Andheri",
-    city: "Mumbai",
-    area: "Andheri West",
-    address: "Shop No. 42, Fish Market Road, Andheri West, Mumbai 400058",
+    name: "Rainbow Aqua and Pets - Tirunelveli",
+    city: "Tirunelveli",
+    area: "Tirunelveli Town",
+    address: "No. 45, South Car Street, Tirunelveli Town - 627006, Tamil Nadu",
     phone: "+91 98765 43210",
     hours: "Mon - Sat: 10:00 AM - 8:00 PM, Sun: 11:00 AM - 6:00 PM",
     services: ["Live fish", "Aquarium setup", "Pet food", "Accessories"],
     mapUrl:
-      "https://www.google.com/maps/search/?api=1&query=Andheri%20West%20Mumbai%20400058",
+      "https://www.google.com/maps/search/?api=1&query=No.%2045%20South%20Car%20Street%20Tirunelveli%20Town%20627006",
   },
   {
     name: "Rainbow Aqua and Pets - Chennai",

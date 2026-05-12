@@ -23,6 +23,8 @@ const formatDate = (value: string) =>
     year: "numeric",
   });
 
+const displayStatus = (status: string) => status === "confirmed" ? "approved" : status;
+
 export default function AccountOrdersPage() {
   const currentUser = useAuthStore((state) => state.currentUser);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -62,7 +64,7 @@ export default function AccountOrdersPage() {
                   <div className="flex items-center justify-between gap-4 sm:justify-end">
                     <p className="font-semibold">Rs. {order.total.toLocaleString("en-IN")}</p>
                     <Badge className={statusClass[order.status] ?? "bg-gray-100 text-gray-700"}>
-                      {order.status}
+                      {displayStatus(order.status)}
                     </Badge>
                   </div>
                 </div>

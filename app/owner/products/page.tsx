@@ -47,6 +47,8 @@ export default function ProductsPage() {
   const { currentUser, logout, getAllOrders, fetchAdminData } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [products, setProducts] = useState<DBProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -93,6 +95,12 @@ export default function ProductsPage() {
     }
   };
 
+  const getStatus = (p: DBProduct) => {
+    if (!p.inStock || p.stock === 0) return "Out of Stock";
+    if (p.stock <= 5) return "Low Stock";
+    return "Active";
+  };
+
   const filteredProducts = products.filter(p => {
     const normalizedSearch = searchQuery.trim().toLowerCase();
     const matchesSearch =
@@ -102,14 +110,9 @@ export default function ProductsPage() {
       p.subcategory.toLowerCase().includes(normalizedSearch) ||
       (p.sku ?? "").toLowerCase().includes(normalizedSearch);
     const matchesCategory = selectedCategory === "All" || p.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    const matchesStatus = selectedStatus === "All" || getStatus(p) === selectedStatus;
+    return matchesSearch && matchesCategory && matchesStatus;
   });
-
-  const getStatus = (p: DBProduct) => {
-    if (!p.inStock || p.stock === 0) return "Out of Stock";
-    if (p.stock <= 5) return "Low Stock";
-    return "Active";
-  };
 
   if (loading) {
     return (
@@ -231,12 +234,49 @@ export default function ProductsPage() {
                   <option value="birds">Birds</option>
                   <option value="accessories">Accessories</option>
                 </select>
-                <Button variant="outline">
+                <Button
+                  variant="outline"
+                  type="button"
+                  onClick={() => setFiltersOpen((open) => !open)}
+                  aria-expanded={filtersOpen}
+                  aria-controls="product-filters-panel"
+                >
                   <Filter className="w-4 h-4 mr-2" />
                   Filters
                 </Button>
               </div>
             </div>
+
+            {filtersOpen && (
+              <div id="product-filters-panel" className="mt-4 grid gap-4 border-t pt-4 sm:grid-cols-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium uppercase text-gray-500">Stock Status</label>
+                  <select
+                    className="w-full rounded-lg border px-3 py-2 text-sm"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="All">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Low Stock">Low Stock</option>
+                    <option value="Out of Stock">Out of Stock</option>
+                  </select>
+                </div>
+                <div className="flex items-end">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory("All");
+                      setSelectedStatus("All");
+                      setSearchQuery("");
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Products Table */}

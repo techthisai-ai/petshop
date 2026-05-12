@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Fish,
   Package,
@@ -66,6 +66,7 @@ const statusColors: Record<string, string> = {
 export default function OwnerDashboard() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [expandedStat, setExpandedStat] = useState<string | null>(null);
   const { currentUser, logout, getAllOrders, getAllUserCarts, users, fetchAdminData } = useAuthStore();
 
   useEffect(() => {
@@ -84,14 +85,23 @@ export default function OwnerDashboard() {
   const totalRevenue = orders.filter(o => o.paymentStatus === 'paid').reduce((sum, o) => sum + o.total, 0);
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(o => o.status === 'pending').length;
-  const totalCustomers = users.filter(u => u.role === 'user').length;
+  const customerUsers = users.filter(u => u.role === 'user');
+  const paidOrders = orders.filter(o => o.paymentStatus === 'paid');
+  const pendingOrderList = orders.filter(o => o.status === 'pending');
+  const totalCustomers = customerUsers.length;
 
   const liveStats = [
-    { label: "Total Revenue", value: `₹${totalRevenue.toLocaleString('en-IN')}`, change: "", icon: DollarSign, color: "bg-green-500" },
-    { label: "Total Orders", value: totalOrders.toString(), change: "", icon: ShoppingCart, color: "bg-blue-500" },
-    { label: "Pending Orders", value: pendingOrders.toString(), change: "", icon: Package, color: "bg-purple-500" },
-    { label: "Customers", value: totalCustomers.toString(), change: "", icon: Users, color: "bg-orange-500" },
+    { id: "revenue", label: "Total Revenue", value: `₹${totalRevenue.toLocaleString('en-IN')}`, change: "", icon: DollarSign, color: "bg-green-500" },
+    { id: "orders", label: "Total Orders", value: totalOrders.toString(), change: "", icon: ShoppingCart, color: "bg-blue-500" },
+    { id: "pending", label: "Pending Orders", value: pendingOrders.toString(), change: "", icon: Package, color: "bg-purple-500" },
+    { id: "customers", label: "Customers", value: totalCustomers.toString(), change: "", icon: Users, color: "bg-orange-500" },
   ];
+
+  const activeStat = liveStats.find((stat) => stat.id === expandedStat);
+
+  const toggleStat = (statId: string) => {
+    setExpandedStat((current) => current === statId ? null : statId);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -199,14 +209,19 @@ export default function OwnerDashboard() {
         {/* Content */}
         <main className="p-4 sm:p-6">
           {/* Stats */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {liveStats.map((stat, index) => (
-              <motion.div
+              <motion.button
                 key={stat.label}
+                type="button"
+                onClick={() => toggleStat(stat.id)}
+                aria-expanded={expandedStat === stat.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl p-4 sm:p-5 shadow-sm border"
+                className={`bg-white rounded-xl p-4 sm:p-5 shadow-sm border text-left transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-cyan-500 ${
+                  expandedStat === stat.id ? 'border-cyan-500 ring-2 ring-cyan-100' : ''
+                }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -221,9 +236,107 @@ export default function OwnerDashboard() {
                     <stat.icon className="w-5 h-5 text-white" />
                   </div>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
+
+          <AnimatePresence mode="wait">
+            {activeStat && (
+              <motion.div
+                key={activeStat.id}
+                initial={{ opacity: 0, height: 0, y: -8 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -8 }}
+                transition={{ duration: 0.22 }}
+                className="mb-6 overflow-hidden rounded-xl border bg-white shadow-sm"
+              >
+                <div className="border-b bg-gray-50 px-4 py-3 sm:px-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <h2 className="font-semibold text-gray-800">{activeStat.label}</h2>
+                      <p className="text-sm text-gray-500">Detailed view</p>
+                    </div>
+                    <Button variant="ghost" size="sm" onClick={() => setExpandedStat(null)}>
+                      Close
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="p-4 sm:p-5">
+                  {activeStat.id === "revenue" && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between rounded-lg bg-green-50 p-3">
+                        <span className="text-sm font-medium text-green-800">Paid revenue</span>
+                        <span className="font-bold text-green-800">₹{totalRevenue.toLocaleString('en-IN')}</span>
+                      </div>
+                      {paidOrders.slice(0, 5).map((order) => (
+                        <div key={order.id} className="flex items-center justify-between border-b py-2 last:border-b-0">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">{order.userName}</p>
+                            <p className="text-xs text-gray-500">{order.id.slice(0, 10)}</p>
+                          </div>
+                          <span className="text-sm font-semibold text-gray-800">₹{order.total.toLocaleString('en-IN')}</span>
+                        </div>
+                      ))}
+                      {paidOrders.length === 0 && <p className="text-sm text-gray-400">No paid orders yet.</p>}
+                    </div>
+                  )}
+
+                  {activeStat.id === "orders" && (
+                    <div className="space-y-3">
+                      {orders.slice(0, 6).map((order) => (
+                        <div key={order.id} className="flex flex-col gap-2 border-b py-2 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">{order.userName}</p>
+                            <p className="text-xs text-gray-500">{order.id.slice(0, 10)} - {order.items.length} items</p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-sm font-semibold text-gray-800">₹{order.total.toLocaleString('en-IN')}</span>
+                            <Badge className="bg-gray-100 text-gray-700">{order.status === 'confirmed' ? 'approved' : order.status}</Badge>
+                          </div>
+                        </div>
+                      ))}
+                      {orders.length === 0 && <p className="text-sm text-gray-400">No orders yet.</p>}
+                    </div>
+                  )}
+
+                  {activeStat.id === "pending" && (
+                    <div className="space-y-3">
+                      {pendingOrderList.slice(0, 6).map((order) => (
+                        <div key={order.id} className="flex flex-col gap-2 border-b py-2 last:border-b-0 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">{order.userName}</p>
+                            <p className="text-xs text-gray-500">{order.userPhone || order.userEmail || order.id.slice(0, 10)}</p>
+                          </div>
+                          <Link href="/owner/orders" className="text-sm font-medium text-cyan-600 hover:underline">
+                            Review order
+                          </Link>
+                        </div>
+                      ))}
+                      {pendingOrderList.length === 0 && <p className="text-sm text-gray-400">No pending orders.</p>}
+                    </div>
+                  )}
+
+                  {activeStat.id === "customers" && (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {customerUsers.slice(0, 6).map((user) => (
+                        <div key={user.id} className="flex items-center gap-3 rounded-lg border p-3">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-100 text-sm font-bold text-cyan-700">
+                            {user.name.charAt(0)}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium text-gray-800">{user.name}</p>
+                            <p className="truncate text-xs text-gray-500">{user.email || user.mobile || "No contact"}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {customerUsers.length === 0 && <p className="text-sm text-gray-400">No customers yet.</p>}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Recent Orders from Firestore */}
