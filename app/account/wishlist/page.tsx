@@ -8,11 +8,12 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
-import { useWishlistStore } from "@/lib/store";
+import { useWishlistStore, WishlistItem } from "@/lib/store";
 
 export default function WishlistPage() {
   const router = useRouter();
   const { items } = useWishlistStore();
+  const wishlistItems = items as WishlistItem[];
 
   return (
     <main className="min-h-screen">
@@ -61,7 +62,7 @@ export default function WishlistPage() {
             </motion.div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {items.map((item, index) => (
+              {wishlistItems.map((item, index) => (
                 <ProductCard key={item.product.id} product={item.product} index={index} />
               ))}
             </div>

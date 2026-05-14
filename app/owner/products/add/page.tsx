@@ -20,6 +20,8 @@ import { addProductToDB, createSlug, uploadProductImage } from "@/lib/firebaseSe
 const categories = [
   { id: "fish", name: "Fish", subcategories: ["Betta", "Goldfish", "Guppy", "Discus", "Angelfish", "Tetra", "Molly"] },
   { id: "birds", name: "Birds", subcategories: ["Budgerigar", "Cockatiel", "Lovebird", "Finch", "Parrot", "Canary"] },
+  { id: "dogs", name: "Dogs", subcategories: ["Labrador", "German Shepherd", "Golden Retriever", "Poodle", "Beagle", "Bulldog", "Pug"] },
+  { id: "cats", name: "Cats", subcategories: ["Persian", "Siamese", "Maine Coon", "Bengal", "Ragdoll", "British Shorthair", "Sphynx"] },
   { id: "accessories", name: "Accessories", subcategories: ["Aquarium", "Filter", "Heater", "Light", "Food", "Decor"] },
 ];
 

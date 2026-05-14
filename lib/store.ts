@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 export interface Product {
   id: string;
@@ -21,6 +21,8 @@ export interface Product {
   rating: number;
   reviews: number;
   tags?: string[];
+  weightValue?: number;
+  weightUnit?: 'g' | 'kg';
 }
 
 export interface CartItem {
@@ -52,6 +54,9 @@ interface WishlistStore {
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
+  clearWishlist: () => void;
+  userId: string | null;
+  setUserId: (userId: string | null) => void;
 }
 
 interface UIStore {
@@ -154,10 +159,30 @@ export const useCartStore = create<CartStore>()(
   )
 );
 
+// Module-level userId tracker to avoid circular reference in storage adapter
+let _aquapetWishlistUserId: string | null = null;
+
 export const useWishlistStore = create<WishlistStore>()(
   persist(
     (set, get) => ({
       items: [],
+      userId: null,
+      setUserId: (userId) => {
+        const prev = get().userId;
+        if (prev !== userId) {
+          _aquapetWishlistUserId = userId;
+          set({ userId, items: [] });
+          if (userId && typeof window !== 'undefined') {
+            try {
+              const raw = localStorage.getItem(`aquapet-wishlist-${userId}`);
+              if (raw) {
+                const parsed = JSON.parse(raw);
+                set({ items: parsed.state?.items ?? [] });
+              }
+            } catch {}
+          }
+        }
+      },
       addItem: (product) => {
         if (!get().isInWishlist(product.id)) {
           set({ items: [...get().items, { product, addedAt: new Date() }] });
@@ -169,14 +194,31 @@ export const useWishlistStore = create<WishlistStore>()(
       isInWishlist: (productId) => {
         return get().items.some((item) => item.product.id === productId);
       },
+      clearWishlist: () => set({ items: [] }),
     }),
     {
       name: "aquapet-wishlist",
+      storage: createJSONStorage(() => ({
+        getItem: (name) => {
+          if (typeof window === 'undefined') return null;
+          const key = _aquapetWishlistUserId ? `${name}-${_aquapetWishlistUserId}` : name;
+          return localStorage.getItem(key);
+        },
+        setItem: (name, value) => {
+          if (typeof window === 'undefined') return;
+          const key = _aquapetWishlistUserId ? `${name}-${_aquapetWishlistUserId}` : name;
+          localStorage.setItem(key, value);
+        },
+        removeItem: (name) => {
+          if (typeof window === 'undefined') return;
+          const key = _aquapetWishlistUserId ? `${name}-${_aquapetWishlistUserId}` : name;
+          localStorage.removeItem(key);
+        },
+      })),
       skipHydration: true,
       partialize: (state) => ({ items: state.items }),
       merge: (persistedState, currentState) => {
         const persisted = persistedState as Partial<WishlistStore>;
-
         return {
           ...currentState,
           items: persisted.items ?? currentState.items,

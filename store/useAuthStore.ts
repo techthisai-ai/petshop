@@ -19,6 +19,23 @@ import {
 import { isAdminCredential, isAdminEmail } from '@/lib/authConfig'
 import { isValidIndianMobile, normalizeIndianMobile } from '@/lib/tamilnaduData'
 
+// Lazy import to avoid circular deps — called after auth state changes
+function getWishlistStores() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useWishlistStore: libStore } = require('@/lib/store')
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useWishlistStore: storeStore } = require('@/store/useWishlistStore')
+  return { libStore, storeStore }
+}
+
+function syncWishlistUser(userId: string | null) {
+  try {
+    const { libStore, storeStore } = getWishlistStores()
+    libStore.getState().setUserId(userId)
+    storeStore.getState().setUserId(userId)
+  } catch {}
+}
+
 export type UserRole = 'guest' | 'user' | 'owner' | 'admin'
 export type AccountStatus = 'active' | 'inactive' | 'suspended'
 
@@ -194,6 +211,7 @@ export const useAuthStore = create<AuthState>()(
         if (user.status !== 'active') return { success: false, message: 'Account not active.' }
         set({ currentUser: user, isAuthenticated: true, otpSession: null })
         syncCookie(true, user)
+        syncWishlistUser(user.id)
         return { success: true, message: 'Login successful!' }
       },
 
@@ -222,6 +240,7 @@ export const useAuthStore = create<AuthState>()(
 
           set({ currentUser: user, isAuthenticated: true })
           syncCookie(true, user)
+          syncWishlistUser(user.id)
           return { success: true, message: 'Login successful!' }
         } catch (err: any) {
           const code = err?.code ?? ''
@@ -232,6 +251,7 @@ export const useAuthStore = create<AuthState>()(
                 if (!user) return { success: false, message: 'Unable to create admin profile.' }
                 set({ currentUser: user, isAuthenticated: true })
                 syncCookie(true, user)
+                syncWishlistUser(user.id)
                 return { success: true, message: 'Admin account created and logged in!' }
               } catch (setupErr: any) {
                 return { success: false, message: setupErr?.message ?? 'Unable to create admin account.' }
@@ -291,6 +311,7 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
           }))
           syncCookie(true, newUser)
+          syncWishlistUser(newUser.id)
           return { success: true, message: 'Registration successful!' }
         } catch (err: any) {
           const code = err?.code ?? ''
@@ -307,6 +328,7 @@ export const useAuthStore = create<AuthState>()(
       // ── Firebase logout ─────────────────────────────────────────────
       logout: async () => {
         await firebaseSignOut()
+        syncWishlistUser(null)
         set({ currentUser: null, isAuthenticated: false, otpSession: null, orders: [] })
         syncCookie(false, null)
       },
@@ -450,6 +472,9 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         if (!state) return
         syncCookie(state.isAuthenticated, state.currentUser ?? null)
+        if (state.isAuthenticated && state.currentUser) {
+          syncWishlistUser(state.currentUser.id)
+        }
       },
     }
   )

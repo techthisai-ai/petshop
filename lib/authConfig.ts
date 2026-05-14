@@ -6,3 +6,4 @@ export const isAdminEmail = (email?: string | null) =>
 
 export const isAdminCredential = (email: string, password: string) =>
   isAdminEmail(email) && password === ADMIN_PASSWORD;
+  

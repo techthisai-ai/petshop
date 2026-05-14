@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
@@ -29,7 +30,14 @@ export default function AccountOrdersPage() {
   const currentUser = useAuthStore((state) => state.currentUser);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const orders = useAuthStore((state) => state.orders);
+  const fetchMyOrders = useAuthStore((state) => state.fetchMyOrders);
   const myOrders = currentUser ? orders.filter((order) => order.userId === currentUser.id) : [];
+
+  useEffect(() => {
+    if (isAuthenticated && currentUser) {
+      fetchMyOrders();
+    }
+  }, [isAuthenticated, currentUser?.id]);
 
   return (
     <main className="min-h-screen bg-gray-50">

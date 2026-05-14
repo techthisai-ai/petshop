@@ -53,11 +53,22 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // ── /checkout ──────────────────────────────────────────────────────
+  if (pathname === '/checkout' || pathname === '/checkout/') {
+    if (!auth?.isAuthenticated) {
+      const url = new URL('/auth/signin', request.url)
+      url.searchParams.set('redirect', '/checkout')
+      return NextResponse.redirect(url)
+    }
+    return NextResponse.next()
+  }
+
   // ── /auth/signin & /auth/register ─────────────────────────
   if (pathname === '/auth/signin' || pathname === '/auth/register') {
     if (auth?.isAuthenticated) {
       if (hasAdminAccess) return NextResponse.redirect(new URL('/owner/dashboard', request.url))
-      return NextResponse.redirect(new URL('/account', request.url))
+      const redirectTo = request.nextUrl.searchParams.get('redirect')
+      return NextResponse.redirect(new URL(redirectTo || '/account', request.url))
     }
     return NextResponse.next()
   }
@@ -66,5 +77,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/owner/:path*', '/auth/signin', '/auth/register'],
+  matcher: ['/admin/:path*', '/owner/:path*', '/auth/signin', '/auth/register', '/checkout'],
 }

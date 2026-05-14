@@ -156,6 +156,15 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
               {product.name}
             </h3>
 
+            {/* Weight */}
+            {(product.weightValue || product.specifications?.['Weight']) && (
+              <p className="text-xs text-muted-foreground mt-1">
+                {product.weightValue
+                  ? `${product.weightValue}${product.weightUnit ?? 'g'}`
+                  : product.specifications!['Weight']}
+              </p>
+            )}
+
             {/* Rating */}
             <div className="flex items-center gap-1 mt-2">
               <div className="flex">

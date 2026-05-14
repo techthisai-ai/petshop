@@ -88,6 +88,8 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
     isFeatured: product.isFeatured,
     rating: 5,
     reviews: 0,
+    weightValue: product.weightValue,
+    weightUnit: product.weightUnit,
     tags: [FIREBASE_PRODUCT_TAG, product.name, product.category, product.subcategory, product.sku]
       .filter(Boolean)
       .map(String),

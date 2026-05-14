@@ -232,6 +232,8 @@ export default function ProductsPage() {
                   <option value="All">All Categories</option>
                   <option value="fish">Fish</option>
                   <option value="birds">Birds</option>
+                  <option value="dogs">Dogs</option>
+                  <option value="cats">Cats</option>
                   <option value="accessories">Accessories</option>
                 </select>
                 <Button

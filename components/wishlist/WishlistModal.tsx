@@ -6,11 +6,13 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Heart, ShoppingCart, Trash2 } from 'lucide-react'
 import { useWishlistStore } from '@/store/useWishlistStore'
+import type { WishlistItem } from '@/types'
 import { useCartStore } from '@/store/useCartStore'
 import { formatPrice } from '@/lib/utils'
 
 export default function WishlistModal() {
-  const { items, isOpen, closeWishlist, removeItem } = useWishlistStore()
+  const { items: rawItems, isOpen, closeWishlist, removeItem } = useWishlistStore()
+  const items = rawItems as WishlistItem[]
   const { addItem: addToCart } = useCartStore()
 
   // Close on escape key
@@ -35,7 +37,7 @@ export default function WishlistModal() {
   }, [isOpen])
 
   const handleMoveToCart = (productId: string) => {
-    const item = items.find(i => i.product.id === productId)
+    const item = items.find((i: WishlistItem) => i.product.id === productId)
     if (item) {
       addToCart(item.product)
       removeItem(productId)

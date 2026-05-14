@@ -479,6 +479,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
     ],
     description: "Premium natural driftwood and dragon stone set. Pre-cleaned and ready for aquarium use. Creates stunning aquascapes.",
+    weightValue: 1.5,
+    weightUnit: "kg",
     specifications: {
       "Material": "Natural Driftwood & Dragon Stone",
       "Treatment": "Pre-cleaned, aquarium-safe",
@@ -502,6 +504,8 @@ export const products: Product[] = [
       "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
     ],
     description: "High-quality floating pellets with color-enhancing ingredients. Suitable for all tropical fish. No cloudiness guaranteed.",
+    weightValue: 200,
+    weightUnit: "g",
     specifications: {
       "Form": "Floating pellets",
       "Suitable For": "All tropical fish",

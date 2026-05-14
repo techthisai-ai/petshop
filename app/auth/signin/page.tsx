@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, Fish, ArrowRight, Truck, Shield, Heart, Loader2 } from "lucide-react";
@@ -13,8 +13,10 @@ import { toast } from "@/components/ui/use-toast";
 import { useAuthStore } from "@/store/useAuthStore";
 import { isAdminEmail } from "@/lib/authConfig";
 
-export default function SignInPage() {
+function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/account";
   const loginWithPassword = useAuthStore((state) => state.loginWithPassword);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +43,7 @@ export default function SignInPage() {
       }
 
       toast({ title: "Welcome back! 👋", description: "You have successfully signed in." });
-      router.push("/account");
+      router.push(redirectTo);
     } finally {
       setIsLoading(false);
     }
@@ -206,5 +208,13 @@ export default function SignInPage() {
       </div>
       <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-green-600 via-white to-orange-500" />
     </div>
+  );
+}
+
+export default function SignInPageWrapper() {
+  return (
+    <Suspense>
+      <SignInPage />
+    </Suspense>
   );
 }

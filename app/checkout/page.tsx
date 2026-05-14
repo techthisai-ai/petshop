@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -41,23 +41,43 @@ export default function CheckoutPage() {
     getSubtotal: getLegacySubtotal,
     clearCart: clearLegacyCart,
   } = useLegacyCartStore();
-  const { currentUser, createOrder } = useAuthStore();
+  const { currentUser, createOrder, updateProfile, isAuthenticated } = useAuthStore();
   const router = useRouter();
+
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    const unsub = useAuthStore.persist.onFinishHydration(() => setHydrated(true));
+    if (useAuthStore.persist.hasHydrated()) setHydrated(true);
+    return unsub;
+  }, []);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    if (!isAuthenticated) {
+      router.replace("/auth/signin?redirect=/checkout");
+    }
+  }, [hydrated, isAuthenticated, router]);
   const cartItems = items.length > 0 ? items : legacyItems;
   const [currentStep, setCurrentStep] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
   const [isProcessing, setIsProcessing] = useState(false);
   const [agreedToWaiver, setAgreedToWaiver] = useState(false);
 
+  const savedAddress = currentUser?.address;
+  const savedName = currentUser?.name?.split(' ') ?? [];
+  const [isEditingAddress, setIsEditingAddress] = useState(!savedAddress);
+  const [saveAddress, setSaveAddress] = useState(true);
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+
   const [shippingInfo, setShippingInfo] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
+    firstName: savedName[0] ?? "",
+    lastName: savedName.slice(1).join(' ') ?? "",
+    email: currentUser?.email ?? "",
+    phone: currentUser?.mobile ?? "",
+    address: savedAddress?.addressLine1 ?? "",
+    city: savedAddress?.city ?? "",
+    state: savedAddress?.state ?? "",
+    pincode: savedAddress?.pincode ?? "",
   });
 
   const subtotal = items.length > 0 ? getTotal() : getLegacySubtotal();
@@ -68,10 +88,40 @@ export default function CheckoutPage() {
     (item) => item.product.category === "aquarium-fish"
   );
 
+  const buildAddressPayload = () => ({
+    addressLine1: shippingInfo.address,
+    area: shippingInfo.city,
+    city: shippingInfo.city,
+    district: shippingInfo.city,
+    pincode: shippingInfo.pincode,
+    state: 'Tamil Nadu' as const,
+    country: 'India' as const,
+  });
+
+  const handleSaveAddress = async () => {
+    if (!currentUser) return;
+    setIsSavingAddress(true);
+    try {
+      await updateProfile({ address: buildAddressPayload() });
+      setIsEditingAddress(false);
+      toast({ title: 'Address saved!' });
+    } catch {
+      toast({ title: 'Failed to save address', variant: 'destructive' });
+    } finally {
+      setIsSavingAddress(false);
+    }
+  };
+
   const handleShippingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (hasLiveFish && !agreedToWaiver) {
-      return;
+    if (hasLiveFish && !agreedToWaiver) return;
+    // Manual validation only when form fields are visible
+    if (isEditingAddress) {
+      if (!shippingInfo.firstName || !shippingInfo.email || !shippingInfo.phone ||
+          !shippingInfo.address || !shippingInfo.city || !shippingInfo.pincode) {
+        toast({ title: 'Please fill in all required fields', variant: 'destructive' });
+        return;
+      }
     }
     setCurrentStep(2);
   };
@@ -121,6 +171,10 @@ export default function CheckoutPage() {
         paymentMethod: paymentMethod === 'razorpay' ? 'Razorpay' : 'COD',
         paymentStatus: paymentMethod === 'cod' ? 'pending' : 'paid',
       });
+
+      if (currentUser && saveAddress) {
+        await updateProfile({ address: buildAddressPayload() });
+      }
 
       clearCart();
       clearLegacyCart();
@@ -195,17 +249,44 @@ export default function CheckoutPage() {
                   animate={{ opacity: 1, x: 0 }}
                   className="bg-card rounded-xl border p-6"
                 >
-                  <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-secondary" />
-                    Shipping Information
-                  </h2>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                      <MapPin className="w-5 h-5 text-secondary" />
+                      Shipping Information
+                    </h2>
+                    {savedAddress && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsEditingAddress((v) => !v)}
+                      >
+                        {isEditingAddress ? "Cancel" : "Edit Address"}
+                      </Button>
+                    )}
+                  </div>
+
+                  {savedAddress && !isEditingAddress && (
+                    <div className="bg-muted/50 rounded-lg p-4 text-sm mb-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="font-medium">{shippingInfo.firstName} {shippingInfo.lastName}</p>
+                        <span className="text-xs text-accent font-medium flex items-center gap-1">
+                          <Check className="w-3 h-3" /> Saved
+                        </span>
+                      </div>
+                      <p>{shippingInfo.address}</p>
+                      <p>{shippingInfo.city}, {shippingInfo.state} {shippingInfo.pincode}</p>
+                      <p>{shippingInfo.phone}</p>
+                    </div>
+                  )}
+
                   <form onSubmit={handleShippingSubmit} className="space-y-4">
+                    <div className={savedAddress && !isEditingAddress ? "hidden" : ""}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="firstName">First Name</Label>
                         <Input
                           id="firstName"
-                          required
                           value={shippingInfo.firstName}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, firstName: e.target.value })
@@ -216,7 +297,6 @@ export default function CheckoutPage() {
                         <Label htmlFor="lastName">Last Name</Label>
                         <Input
                           id="lastName"
-                          required
                           value={shippingInfo.lastName}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, lastName: e.target.value })
@@ -230,7 +310,6 @@ export default function CheckoutPage() {
                         <Input
                           id="email"
                           type="email"
-                          required
                           value={shippingInfo.email}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, email: e.target.value })
@@ -242,7 +321,6 @@ export default function CheckoutPage() {
                         <Input
                           id="phone"
                           type="tel"
-                          required
                           value={shippingInfo.phone}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, phone: e.target.value })
@@ -254,7 +332,6 @@ export default function CheckoutPage() {
                       <Label htmlFor="address">Address</Label>
                       <Input
                         id="address"
-                        required
                         value={shippingInfo.address}
                         onChange={(e) =>
                           setShippingInfo({ ...shippingInfo, address: e.target.value })
@@ -266,7 +343,6 @@ export default function CheckoutPage() {
                         <Label htmlFor="city">City</Label>
                         <Input
                           id="city"
-                          required
                           value={shippingInfo.city}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, city: e.target.value })
@@ -277,7 +353,6 @@ export default function CheckoutPage() {
                         <Label htmlFor="state">State</Label>
                         <Input
                           id="state"
-                          required
                           value={shippingInfo.state}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, state: e.target.value })
@@ -288,7 +363,6 @@ export default function CheckoutPage() {
                         <Label htmlFor="pincode">Pincode</Label>
                         <Input
                           id="pincode"
-                          required
                           value={shippingInfo.pincode}
                           onChange={(e) =>
                             setShippingInfo({ ...shippingInfo, pincode: e.target.value })
@@ -296,6 +370,34 @@ export default function CheckoutPage() {
                         />
                       </div>
                     </div>
+
+                    </div>{/* end collapsible fields */}
+
+                    {/* Save address option — shown when form is visible and user is logged in */}
+                    {currentUser && isEditingAddress && (
+                      <div className="flex items-center gap-3 pt-1">
+                        <Checkbox
+                          id="saveAddress"
+                          checked={saveAddress}
+                          onCheckedChange={(v) => setSaveAddress(v as boolean)}
+                        />
+                        <Label htmlFor="saveAddress" className="text-sm cursor-pointer">
+                          Save this address for future orders
+                        </Label>
+                        {savedAddress && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            className="ml-auto"
+                            disabled={isSavingAddress}
+                            onClick={handleSaveAddress}
+                          >
+                            {isSavingAddress ? 'Saving…' : 'Save Address'}
+                          </Button>
+                        )}
+                      </div>
+                    )}
 
                     {/* Live Fish Waiver */}
                     {hasLiveFish && (

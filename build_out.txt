@@ -1,0 +1,132 @@
+
+> aquapet-haven@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.0
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+./app/account/orders/page.tsx
+40:6  Warning: React Hook useEffect has missing dependencies: 'currentUser' and 'fetchMyOrders'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/221) ...
+   Generating static pages (55/221) 
+   Generating static pages (110/221) 
+   Generating static pages (165/221) 
+ ✓ Generating static pages (221/221)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
+This command is meant for static-only hosts, and is not necessary to make your application static.
+Pages in your application without server-side data dependencies will be automatically statically exported by `next build`, including pages powered by `getStaticProps`.
+Learn more: https://nextjs.org/docs/messages/api-routes-static-export
+
+Route (app)                                        Size     First Load JS
+┌ ○ /                                              11.9 kB         369 kB
+├ ○ /_not-found                                    143 B          87.6 kB
+├ ○ /about                                         6.6 kB          192 kB
+├ ○ /account                                       4.49 kB         324 kB
+├ ○ /account/addresses                             2.15 kB         322 kB
+├ ○ /account/notifications                         2.95 kB         323 kB
+├ ○ /account/orders                                1.39 kB         321 kB
+├ ○ /account/payments                              1.74 kB         322 kB
+├ ○ /account/security                              2.09 kB         322 kB
+├ ○ /account/settings                              3.7 kB          323 kB
+├ ○ /account/wishlist                              3.6 kB          323 kB
+├ ○ /admin/dashboard                               5.32 kB         284 kB
+├ ○ /admin/login                                   2.7 kB          267 kB
+├ ○ /auth/forgot-password                          6.11 kB         142 kB
+├ ○ /auth/register                                 8.4 kB          279 kB
+├ ○ /auth/signin                                   7.74 kB         278 kB
+├ ○ /birds-fish                                    8.12 kB         333 kB
+├ ○ /blog                                          2.04 kB         322 kB
+├ ● /blog/[slug]                                   4.25 kB         324 kB
+├   ├ /blog/science-behind-cloned-aquarium-fish
+├   ├ /blog/complete-care-guide-discus-fish
+├   ├ /blog/setting-up-first-planted-aquarium
+├   └ /blog/top-10-beginner-friendly-fish
+├ ○ /brands                                        268 B           320 kB
+├ ○ /care                                          268 B           320 kB
+├ ○ /careers                                       269 B           320 kB
+├ ○ /cart                                          3.19 kB         323 kB
+├ ○ /checkout                                      7.95 kB         328 kB
+├ ○ /contact                                       3.65 kB         327 kB
+├ ○ /cookies                                       268 B           320 kB
+├ ○ /faq                                           268 B           320 kB
+├ ○ /login                                         7.53 kB         271 kB
+├ ○ /owner/customers                               3.69 kB         240 kB
+├ ○ /owner/dashboard                               9.11 kB         280 kB
+├ ○ /owner/login                                   5.81 kB         270 kB
+├ ○ /owner/orders                                  7.22 kB         281 kB
+├ ○ /owner/products                                7.55 kB         283 kB
+├ ○ /owner/products/add                            8.98 kB         280 kB
+├ ○ /owner/products/edit                           5.89 kB         242 kB
+├ ● /owner/products/edit/[id]                      2.11 kB         103 kB
+├   ├ /owner/products/edit/cloned-arowana-1
+├   ├ /owner/products/edit/cloned-discus-1
+├   ├ /owner/products/edit/cloned-flowerhorn-1
+├   └ [+17 more paths]
+├ ○ /owner/reports                                 2.36 kB         232 kB
+├ ○ /owner/settings                                2.41 kB         232 kB
+├ ○ /pet5                                          15.7 kB         191 kB
+├ ● /pets/[id]                                     6.01 kB         197 kB
+├   ├ /pets/labrador-retriever
+├   ├ /pets/golden-retriever
+├   ├ /pets/beagle
+├   └ [+47 more paths]
+├ ○ /privacy                                       268 B           320 kB
+├ ○ /product                                       430 B           332 kB
+├ ● /product/[slug]                                234 B           332 kB
+├   ├ /product/premium-cloned-asian-arowana
+├   ├ /product/cloned-blue-diamond-discus
+├   ├ /product/cloned-super-red-dragon-flowerhorn
+├   └ [+60 more paths]
+├ ○ /refunds                                       268 B           320 kB
+├ ○ /returns                                       268 B           320 kB
+├ ○ /reviews                                       248 B           320 kB
+├ ○ /services                                      13.4 kB         193 kB
+├ ○ /services/cat-boarding                         4.45 kB         182 kB
+├ ○ /services/cat-grooming                         4.5 kB          182 kB
+├ ○ /services/cat-visits                           4.55 kB         182 kB
+├ ○ /services/dog-boarding                         4.79 kB         182 kB
+├ ○ /services/dog-daycare                          4.79 kB         182 kB
+├ ○ /services/dog-grooming                         4.94 kB         182 kB
+├ ○ /services/dog-training                         4.36 kB         182 kB
+├ ○ /services/dog-walking                          5.43 kB         188 kB
+├ ○ /services/pet-sitting                          4.75 kB         182 kB
+├ ○ /services/pet-taxi                             4.36 kB         182 kB
+├ ○ /shipping                                      268 B           320 kB
+├ ○ /shop                                          7.08 kB         388 kB
+├ ● /shop/[category]                               8.43 kB         353 kB
+├   ├ /shop/aquarium-fish
+├   └ /shop/accessories
+├ ● /shop/[category]/[subcategory]                 8.41 kB         353 kB
+├   ├ /shop/aquarium-fish/cloned-fish
+├   ├ /shop/aquarium-fish/tropical-fish
+├   ├ /shop/aquarium-fish/goldfish
+├   └ [+17 more paths]
+├ ○ /size-guide                                    268 B           320 kB
+├ ○ /stores                                        2.9 kB          323 kB
+├ ○ /terms                                         268 B           320 kB
+├ ○ /track                                         269 B           320 kB
+└ ○ /wishlist                                      8.14 kB         284 kB
++ First Load JS shared by all                      87.4 kB
+  ├ chunks/7023-6443eef0fdcaf300.js                31.6 kB
+  ├ chunks/fd9d1056-6c45fec9703b15d9.js            53.6 kB
+  └ other shared chunks (total)                    2.19 kB
+
+
+ƒ Middleware                                       30.3 kB
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses getStaticProps)
+

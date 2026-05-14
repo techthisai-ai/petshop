@@ -176,13 +176,13 @@ export function Footer() {
               </Button>
             </div>
             <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-white/70">
-              <a href="tel:+919876543210" className="flex items-center gap-2 py-1 hover:text-secondary active:text-secondary transition-colors">
+              <a href="tel:+918870777420" className="flex items-center gap-2 py-1 hover:text-secondary active:text-secondary transition-colors">
                 <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary flex-shrink-0" />
-                +91 98765 43210
+                +91 88707 77420
               </a>
-              <a href="mailto:hello@aquapethaven.in" className="flex items-center gap-2 py-1 hover:text-secondary active:text-secondary transition-colors">
+              <a href="mailto:rainbowaquariumnellai@gmail.com" className="flex items-center gap-2 py-1 hover:text-secondary active:text-secondary transition-colors">
                 <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary flex-shrink-0" />
-                hello@aquapethaven.in
+                rainbowaquariumnellai@gmail.com
               </a>
               <p className="flex items-center gap-2">
                 <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-secondary flex-shrink-0" />

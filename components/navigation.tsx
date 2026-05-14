@@ -27,6 +27,7 @@ import { useCartStore, useWishlistStore, useUIStore } from "@/lib/store";
 import { useAuthStore } from "@/store/useAuthStore";
 import { categories } from "@/lib/data";
 import { birdsAndFishCategory } from "@/lib/birdsAndFishData";
+import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import { cn } from "@/lib/utils";
 import { CartDrawer } from "./cart-drawer";
 import { isAdminEmail } from "@/lib/authConfig";
@@ -35,6 +36,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "Shop", href: "/shop", hasDropdown: true },
   { name: "🐦 Birds & Fish", href: "/birds-fish", highlight: true, isNew: true },
+  { name: "🐾 Dogs & Cats", href: "/dogs-cats", highlight: true, isDogsCats: true },
   { name: "Cloned Fish", href: "/shop/aquarium-fish/cloned-fish" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
@@ -219,8 +221,9 @@ export function Navigation() {
                       pathname === link.href
                         ? "bg-primary/10 text-primary"
                         : "hover:bg-muted",
-                      link.highlight && "text-secondary font-semibold",
-                      (link as any).isNew && "bg-gradient-to-r from-cyan-50 to-emerald-50 text-cyan-700"
+                      link.highlight && !(link as any).isNew && !(link as any).isDogsCats && "text-secondary font-semibold",
+                      (link as any).isNew && "bg-gradient-to-r from-cyan-50 to-emerald-50 text-cyan-700",
+                      (link as any).isDogsCats && "bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 font-semibold"
                     )}
                   >
                     {link.highlight && !(link as any).isNew && <Sparkles className="w-3 h-3" />}
@@ -251,6 +254,29 @@ export function Navigation() {
                         >
                           <div className="bg-background rounded-2xl shadow-2xl border p-6 backdrop-blur-md">
                             <div className="grid grid-cols-2 gap-6">
+                              {/* Dogs & Cats Category - Featured */}
+                              <div className="col-span-2 bg-gradient-to-r from-amber-50 to-orange-50 p-4 rounded-xl mb-2">
+                                <Link
+                                  href="/dogs-cats"
+                                  onMouseEnter={() => prefetchRoute("/dogs-cats")}
+                                  className="font-semibold text-sm mb-2 flex items-center gap-2 text-amber-700 hover:text-amber-600 transition-colors"
+                                >
+                                  🐾 Dogs & Cats 🐱
+                                </Link>
+                                <p className="text-xs text-gray-600 mb-2">Premium food, toys & accessories for dogs and cats</p>
+                                <div className="flex gap-2 flex-wrap">
+                                  {dogsAndCatsCategory.subcategories.map((sub) => (
+                                    <Link
+                                      key={sub.slug}
+                                      href={`/dogs-cats?type=${sub.slug}`}
+                                      onMouseEnter={() => prefetchRoute("/dogs-cats")}
+                                      className="text-xs bg-white px-2 py-1 rounded-full text-amber-600 hover:bg-amber-100 transition-colors"
+                                    >
+                                      {sub.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
                               {/* Birds & Fish Category - Featured */}
                               <div className="col-span-2 bg-gradient-to-r from-cyan-50 to-emerald-50 p-4 rounded-xl mb-4">
                                 <Link
@@ -553,15 +579,16 @@ export function Navigation() {
                           pathname === link.href
                             ? "bg-primary/10 text-primary"
                             : "hover:bg-muted",
-                          link.highlight && !(link as any).isNew && "text-secondary",
-                          (link as any).isNew && "bg-gradient-to-r from-cyan-50 to-emerald-50 text-cyan-700"
+                          link.highlight && !(link as any).isNew && !(link as any).isDogsCats && "text-secondary",
+                          (link as any).isNew && "bg-gradient-to-r from-cyan-50 to-emerald-50 text-cyan-700",
+                          (link as any).isDogsCats && "bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700"
                         )}
                       >
                         <span className="flex items-center gap-2">
-                          {link.highlight && !(link as any).isNew && <Sparkles className="w-4 h-4" />}
+                          {link.highlight && !(link as any).isNew && !(link as any).isDogsCats && <Sparkles className="w-4 h-4" />}
                           {link.name}
                         </span>
-                        {link.highlight && !(link as any).isNew && <Badge variant="coral">HOT</Badge>}
+                        {link.highlight && !(link as any).isNew && !(link as any).isDogsCats && <Badge variant="coral">HOT</Badge>}
                         {(link as any).isNew && <Badge className="bg-emerald-500 text-white">NEW</Badge>}
                       </Link>
                     </motion.div>
@@ -572,6 +599,16 @@ export function Navigation() {
                 <div className="mt-4 pt-4 border-t">
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Categories</p>
                   <div className="space-y-3">
+                    {/* Dogs & Cats - Featured */}
+                    <Link
+                      href="/dogs-cats"
+                      onClick={toggleMobileMenu}
+                      className="col-span-2 px-3 py-3 text-sm bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg hover:from-amber-100 hover:to-orange-100 flex items-center justify-between"
+                    >
+                      <span className="flex items-center gap-2 text-amber-700 font-medium">
+                        🐾 Dogs & Cats 🐱
+                      </span>
+                    </Link>
                     {/* Birds & Fish - Featured */}
                     <Link
                       href="/birds-fish"

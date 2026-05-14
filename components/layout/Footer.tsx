@@ -117,13 +117,13 @@ export default function Footer() {
               healthy fish, happy hobbyists.
             </p>
             <div className="space-y-3 text-sm text-gray-400">
-              <a href="tel:+919876543210" className="flex items-center gap-2 hover:text-white transition-colors">
+              <a href="tel:+918870777420" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Phone className="w-4 h-4" />
-                +91 98765 43210
+                +91 88707 77420
               </a>
-              <a href="mailto:info@cloningaquapets.com" className="flex items-center gap-2 hover:text-white transition-colors">
+              <a href="mailto:rainbowaquariumnellai@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Mail className="w-4 h-4" />
-                info@cloningaquapets.com
+                rainbowaquariumnellai@gmail.com
               </a>
               <p className="flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
