@@ -268,8 +268,8 @@ export function Navigation() {
                                   {dogsAndCatsCategory.subcategories.map((sub) => (
                                     <Link
                                       key={sub.slug}
-                                      href={`/dogs-cats?type=${sub.slug}`}
-                                      onMouseEnter={() => prefetchRoute("/dogs-cats")}
+                                      href={`/shop/dogs-cats/${sub.slug}`}
+                                      onMouseEnter={() => prefetchRoute(`/shop/dogs-cats/${sub.slug}`)}
                                       className="text-xs bg-white px-2 py-1 rounded-full text-amber-600 hover:bg-amber-100 transition-colors"
                                     >
                                       {sub.name}
@@ -600,15 +600,27 @@ export function Navigation() {
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Categories</p>
                   <div className="space-y-3">
                     {/* Dogs & Cats - Featured */}
-                    <Link
-                      href="/dogs-cats"
-                      onClick={toggleMobileMenu}
-                      className="col-span-2 px-3 py-3 text-sm bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg hover:from-amber-100 hover:to-orange-100 flex items-center justify-between"
-                    >
-                      <span className="flex items-center gap-2 text-amber-700 font-medium">
+                    <div className="rounded-lg bg-amber-50 p-3">
+                      <Link
+                        href="/shop/dogs-cats"
+                        onClick={toggleMobileMenu}
+                        className="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-700"
+                      >
                         🐾 Dogs & Cats 🐱
-                      </span>
-                    </Link>
+                      </Link>
+                      <div className="flex flex-wrap gap-2">
+                        {dogsAndCatsCategory.subcategories.map((sub) => (
+                          <Link
+                            key={sub.slug}
+                            href={`/shop/dogs-cats/${sub.slug}`}
+                            onClick={toggleMobileMenu}
+                            className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-amber-600 transition-colors hover:bg-amber-100"
+                          >
+                            {sub.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                     {/* Birds & Fish - Featured */}
                     <Link
                       href="/birds-fish"

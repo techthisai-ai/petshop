@@ -1,14 +1,25 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "./firebase";
 import type { Product } from "./store";
 import type { DBProduct } from "./firebaseService";
 import { FIREBASE_PRODUCT_TAG } from "./productLinks";
+import { dogsAndCatsProducts } from "./dogsAndCatsData";
+import { birdsAndFishProducts } from "./birdsAndFishData";
 
-const fallbackFishImage = "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800";
-const fallbackAccessoryImage = "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800";
+// ── Static product base — always available synchronously ──────────────
+export const staticProducts: Product[] = [
+  ...dogsAndCatsProducts,
+  ...birdsAndFishProducts,
+];
+
+// ── Firestore normalisation helpers ───────────────────────────────────
+const fallbackFishImage =
+  "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800";
+const fallbackAccessoryImage =
+  "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800";
 
 const categoryMap: Record<string, string> = {
   fish: "aquarium-fish",
@@ -59,7 +70,8 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
   const category = normalizeCategory(product.category);
   const subcategory = normalizeSubcategory(product.subcategory);
   const images = product.images?.filter(Boolean);
-  const fallbackImage = category === "accessories" ? fallbackAccessoryImage : fallbackFishImage;
+  const fallbackImage =
+    category === "accessories" ? fallbackAccessoryImage : fallbackFishImage;
 
   return {
     id: product.id,
@@ -68,7 +80,9 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
     category,
     subcategory,
     price: Number(product.price) || 0,
-    originalPrice: product.originalPrice ? Number(product.originalPrice) : undefined,
+    originalPrice: product.originalPrice
+      ? Number(product.originalPrice)
+      : undefined,
     images: images?.length ? images : [fallbackImage],
     description: product.description || "Premium product from Rainbow Aqua.",
     specifications: {
@@ -90,69 +104,83 @@ export const mapDBProductToStorefrontProduct = (product: DBProduct): Product => 
     reviews: 0,
     weightValue: product.weightValue,
     weightUnit: product.weightUnit,
-    tags: [FIREBASE_PRODUCT_TAG, product.name, product.category, product.subcategory, product.sku]
+    tags: [
+      FIREBASE_PRODUCT_TAG,
+      product.name,
+      product.category,
+      product.subcategory,
+      product.sku,
+    ]
       .filter(Boolean)
       .map(String),
   };
 };
 
-// ── Module-level singleton cache ──────────────────────────────────────
-// onSnapshot runs only ONCE across all pages — no duplicate Firestore listeners
-let cachedProducts: Product[] = [];
-let cacheLoaded = false;
+// ── Merge helper: Firestore products override static ones by id ───────
+function mergeWithStatic(firestoreProducts: Product[]): Product[] {
+  const firestoreIds = new Set(firestoreProducts.map((p) => p.id));
+  return [
+    ...firestoreProducts,
+    ...staticProducts.filter((p) => !firestoreIds.has(p.id)),
+  ].sort((a, b) => {
+    if (a.isFeatured && !b.isFeatured) return -1;
+    if (!a.isFeatured && b.isFeatured) return 1;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+// ── Module-level Firestore subscription (shared across hook instances) ─
+let firestoreProducts: Product[] = [];
+let firestoreLoaded = false;
 let listeners: Array<(p: Product[]) => void> = [];
 let unsubFirestore: (() => void) | null = null;
 
-function subscribeToProducts() {
-  if (unsubFirestore) return; // already listening
+function subscribeToFirestore() {
+  if (unsubFirestore) return;
   unsubFirestore = onSnapshot(
     collection(db, "products"),
     (snapshot) => {
-      cachedProducts = snapshot.docs
-        .map((docSnap) =>
-          mapDBProductToStorefrontProduct({
-            ...(docSnap.data() as Omit<DBProduct, "id">),
-            id: docSnap.id,
-          } as DBProduct)
-        )
-        .sort((a, b) => {
-          if (a.isFeatured && !b.isFeatured) return -1;
-          if (!a.isFeatured && b.isFeatured) return 1;
-          return a.name.localeCompare(b.name);
-        });
-      cacheLoaded = true;
-      listeners.forEach((fn) => fn(cachedProducts));
+      firestoreProducts = snapshot.docs.map((docSnap) =>
+        mapDBProductToStorefrontProduct({
+          ...(docSnap.data() as Omit<DBProduct, "id">),
+          id: docSnap.id,
+        } as DBProduct)
+      );
+      firestoreLoaded = true;
+      const merged = mergeWithStatic(firestoreProducts);
+      listeners.forEach((fn) => fn(merged));
     },
     () => {
-      cacheLoaded = true;
-      listeners.forEach((fn) => fn([]));
+      // Firestore unavailable — static products are already shown, nothing to do
+      firestoreLoaded = true;
     }
   );
 }
 
+// ── Hook ──────────────────────────────────────────────────────────────
 export function useStorefrontProducts() {
-  const [products, setProducts] = useState<Product[]>(cachedProducts);
-  const [isLoading, setIsLoading] = useState(!cacheLoaded);
+  // Always start with static products — never an empty array
+  const [products, setProducts] = useState<Product[]>(() =>
+    firestoreLoaded ? mergeWithStatic(firestoreProducts) : [...staticProducts]
+  );
 
   useEffect(() => {
-    // If already loaded from cache, skip loading state
-    if (cacheLoaded) {
-      setProducts(cachedProducts);
-      setIsLoading(false);
-      return;
+    // If Firestore already loaded, apply the merged result immediately
+    if (firestoreLoaded) {
+      setProducts(mergeWithStatic(firestoreProducts));
     }
 
-    const handler = (p: Product[]) => {
-      setProducts(p);
-      setIsLoading(false);
-    };
+    // Register listener for future Firestore updates
+    const handler = (merged: Product[]) => setProducts(merged);
     listeners.push(handler);
-    subscribeToProducts();
+
+    // Start Firestore subscription if not already running
+    subscribeToFirestore();
 
     return () => {
       listeners = listeners.filter((fn) => fn !== handler);
     };
   }, []);
 
-  return { products, isLoading };
+  return { products, isLoading: false };
 }

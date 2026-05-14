@@ -1,12 +1,10 @@
 /** @type {import('next').NextConfig} */
-const isProductionBuild = process.env.NODE_ENV === 'production'
-
 const nextConfig = {
-  output: isProductionBuild ? 'export' : undefined,
-  trailingSlash: isProductionBuild,
+  output: 'export',
+  trailingSlash: true,
   reactStrictMode: false, // strict mode causes double renders in dev — slows navigation
   compiler: {
-    removeConsole: isProductionBuild ? { exclude: ['error'] } : false,
+    removeConsole: { exclude: ['error'] },
   },
   images: {
     unoptimized: true,

@@ -1,0 +1,166 @@
+  ▲ Next.js 14.2.0
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../typescript/lib/typescript' in c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build for build dependencies doesn't lead to expected result 'C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js', but to 'c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../typescript/lib/typescript (expected C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js)
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at resolve commonjs c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../typescript/lib/typescript' in c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build for build dependencies doesn't lead to expected result 'C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js', but to 'c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../typescript/lib/typescript (expected C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js)
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at resolve commonjs c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 6 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../typescript/lib/typescript' in c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build for build dependencies doesn't lead to expected result 'C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js', but to 'c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../typescript/lib/typescript (expected C:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\typescript\lib\typescript.js)
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\load-jsconfig.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack-config.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\handle-externals.js
+<w>  at file dependencies c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at file c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+<w>  at resolve commonjs c:\Users\k9669\Downloads\petshop-main\petshop-main\node_modules\next\dist\build\webpack\loaders\next-swc-loader.js
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+./app/account/orders/page.tsx
+40:6  Warning: React Hook useEffect has missing dependencies: 'currentUser' and 'fetchMyOrders'. Either include them or remove the dependency array.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/229) ...
+   Generating static pages (57/229) 
+   Generating static pages (114/229) 
+   Generating static pages (171/229) 
+ ✓ Generating static pages (229/229)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ⚠ Statically exporting a Next.js application via `next export` disables API routes and middleware.
+This command is meant for static-only hosts, and is not necessary to make your application static.
+Pages in your application without server-side data dependencies will be automatically statically exported by `next build`, including pages powered by `getStaticProps`.
+Learn more: https://nextjs.org/docs/messages/api-routes-static-export
+
+Route (app)                                        Size     First Load JS
+┌ ○ /                                              11.9 kB         372 kB
+├ ○ /_not-found                                    143 B          87.6 kB
+├ ○ /about                                         6.6 kB          192 kB
+├ ○ /account                                       4.5 kB          328 kB
+├ ○ /account/addresses                             2.15 kB         325 kB
+├ ○ /account/notifications                         2.95 kB         326 kB
+├ ○ /account/orders                                1.39 kB         325 kB
+├ ○ /account/payments                              1.74 kB         325 kB
+├ ○ /account/security                              2.09 kB         325 kB
+├ ○ /account/settings                              3.7 kB          327 kB
+├ ○ /account/wishlist                              3.61 kB         327 kB
+├ ○ /admin/dashboard                               5.32 kB         285 kB
+├ ○ /admin/login                                   2.7 kB          268 kB
+├ ○ /auth/forgot-password                          6.11 kB         142 kB
+├ ○ /auth/register                                 8.4 kB          280 kB
+├ ○ /auth/signin                                   7.78 kB         280 kB
+├ ○ /birds-fish                                    8.13 kB         337 kB
+├ ○ /blog                                          2.04 kB         325 kB
+├ ● /blog/[slug]                                   4.25 kB         327 kB
+├   ├ /blog/science-behind-cloned-aquarium-fish
+├   ├ /blog/complete-care-guide-discus-fish
+├   ├ /blog/setting-up-first-planted-aquarium
+├   └ /blog/top-10-beginner-friendly-fish
+├ ○ /brands                                        268 B           323 kB
+├ ○ /care                                          268 B           323 kB
+├ ○ /careers                                       268 B           323 kB
+├ ○ /cart                                          3.19 kB         326 kB
+├ ○ /checkout                                      8.08 kB         331 kB
+├ ○ /contact                                       3.65 kB         331 kB
+├ ○ /cookies                                       269 B           323 kB
+├ ○ /dogs-cats                                     376 B          87.8 kB
+├ ○ /faq                                           268 B           323 kB
+├ ○ /login                                         7.53 kB         273 kB
+├ ○ /owner/customers                               3.69 kB         241 kB
+├ ○ /owner/dashboard                               9.11 kB         281 kB
+├ ○ /owner/login                                   5.81 kB         271 kB
+├ ○ /owner/orders                                  7.22 kB         282 kB
+├ ○ /owner/products                                7.57 kB         285 kB
+├ ○ /owner/products/add                            9.11 kB         281 kB
+├ ○ /owner/products/edit                           6.02 kB         243 kB
+├ ● /owner/products/edit/[id]                      2.11 kB         103 kB
+├   ├ /owner/products/edit/cloned-arowana-1
+├   ├ /owner/products/edit/cloned-discus-1
+├   ├ /owner/products/edit/cloned-flowerhorn-1
+├   └ [+17 more paths]
+├ ○ /owner/reports                                 2.36 kB         233 kB
+├ ○ /owner/settings                                2.41 kB         233 kB
+├ ○ /pet5                                          15.7 kB         191 kB
+├ ● /pets/[id]                                     6.01 kB         197 kB
+├   ├ /pets/labrador-retriever
+├   ├ /pets/golden-retriever
+├   ├ /pets/beagle
+├   └ [+47 more paths]
+├ ○ /privacy                                       268 B           323 kB
+├ ○ /product                                       430 B           335 kB
+├ ● /product/[slug]                                234 B           335 kB
+├   ├ /product/premium-cloned-asian-arowana
+├   ├ /product/cloned-blue-diamond-discus
+├   ├ /product/cloned-super-red-dragon-flowerhorn
+├   └ [+60 more paths]
+├ ○ /refunds                                       268 B           323 kB
+├ ○ /returns                                       268 B           323 kB
+├ ○ /reviews                                       248 B           323 kB
+├ ○ /services                                      13.4 kB         193 kB
+├ ○ /services/cat-boarding                         4.45 kB         182 kB
+├ ○ /services/cat-grooming                         4.5 kB          182 kB
+├ ○ /services/cat-visits                           4.55 kB         182 kB
+├ ○ /services/dog-boarding                         4.79 kB         182 kB
+├ ○ /services/dog-daycare                          4.79 kB         182 kB
+├ ○ /services/dog-grooming                         4.94 kB         182 kB
+├ ○ /services/dog-training                         4.36 kB         182 kB
+├ ○ /services/dog-walking                          5.43 kB         188 kB
+├ ○ /services/pet-sitting                          4.75 kB         182 kB
+├ ○ /services/pet-taxi                             4.36 kB         182 kB
+├ ○ /shipping                                      268 B           323 kB
+├ ○ /shop                                          7.09 kB         392 kB
+├ ● /shop/[category]                               8.5 kB          356 kB
+├   ├ /shop/dogs-cats
+├   ├ /shop/aquarium-fish
+├   └ /shop/accessories
+├ ● /shop/[category]/[subcategory]                 8.48 kB         356 kB
+├   ├ /shop/dogs-cats/dog-food
+├   ├ /shop/dogs-cats/cat-food
+├   ├ /shop/dogs-cats/toys
+├   └ [+23 more paths]
+├ ○ /size-guide                                    268 B           323 kB
+├ ○ /stores                                        2.9 kB          326 kB
+├ ○ /terms                                         268 B           323 kB
+├ ○ /track                                         268 B           323 kB
+└ ○ /wishlist                                      7.99 kB         285 kB
++ First Load JS shared by all                      87.4 kB
+  ├ chunks/7023-6443eef0fdcaf300.js                31.6 kB
+  ├ chunks/fd9d1056-6c45fec9703b15d9.js            53.6 kB
+  └ other shared chunks (total)                    2.19 kB
+
+
+ƒ Middleware                                       30.5 kB
+
+○  (Static)  prerendered as static content
+●  (SSG)     prerendered as static HTML (uses getStaticProps)
+

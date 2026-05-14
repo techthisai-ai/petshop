@@ -1,6 +1,8 @@
 import { Product } from "./store";
+import { dogsAndCatsCategory } from "./dogsAndCatsData";
 
 export const categories = [
+  dogsAndCatsCategory,
   {
     id: "aquarium-fish",
     name: "Aquarium Fish",
@@ -27,6 +29,7 @@ export const categories = [
     slug: "accessories",
     image: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
     description: "Premium aquarium accessories & supplies",
+    featured: false,
     subcategories: [
       { name: "Aquarium Tanks", slug: "aquarium-tanks" },
       { name: "Filters", slug: "filters" },
