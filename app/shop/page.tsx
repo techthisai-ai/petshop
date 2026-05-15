@@ -113,9 +113,8 @@ function ShopPageContent() {
     setInStockOnly(false);
   };
 
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
-      {/* Categories */}
       <Accordion type="single" collapsible defaultValue="categories">
         <AccordionItem value="categories">
           <AccordionTrigger>Categories</AccordionTrigger>
@@ -138,7 +137,6 @@ function ShopPageContent() {
         </AccordionItem>
       </Accordion>
 
-      {/* Price Range */}
       <Accordion type="single" collapsible defaultValue="price">
         <AccordionItem value="price">
           <AccordionTrigger>Price Range</AccordionTrigger>
@@ -160,7 +158,6 @@ function ShopPageContent() {
         </AccordionItem>
       </Accordion>
 
-      {/* Stock */}
       <div className="flex items-center space-x-2">
         <Checkbox
           id="inStock"
@@ -172,7 +169,6 @@ function ShopPageContent() {
         </Label>
       </div>
 
-      {/* Clear Filters */}
       <Button variant="outline" onClick={clearFilters} className="w-full">
         Clear All Filters
       </Button>
@@ -251,7 +247,7 @@ function ShopPageContent() {
                   <SlidersHorizontal className="w-4 h-4" />
                   Filters
                 </h2>
-                <FilterContent />
+                {filterContent}
               </div>
             </aside>
 
@@ -278,7 +274,7 @@ function ShopPageContent() {
                         <SheetTitle>Filters</SheetTitle>
                       </SheetHeader>
                       <div className="mt-4 overflow-y-auto h-full pb-20">
-                        <FilterContent />
+                        {filterContent}
                       </div>
                     </SheetContent>
                   </Sheet>

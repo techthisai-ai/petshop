@@ -1,93 +1,70 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Filter, Grid, Grid3X3, SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, Filter } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ProductCard } from "@/components/product-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { categories } from "@/lib/data";
+import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 
-interface SubcategoryPageClientProps {
+const allCategories = [dogsAndCatsCategory, ...categories];
+
+interface Props {
   categorySlug: string;
   subcategorySlug: string;
 }
 
-export default function SubcategoryPageClient({ categorySlug, subcategorySlug }: SubcategoryPageClientProps) {
-  const category = categories.find((c) => c.slug === categorySlug);
+export default function SubcategoryPageClient({ categorySlug, subcategorySlug }: Props) {
+  const category = allCategories.find((c) => c.slug === categorySlug);
   const subcategory = category?.subcategories?.find((s) => s.slug === subcategorySlug);
 
-  const [gridCols, setGridCols] = useState<2 | 3 | 4 | 5>(4);
   const [sortBy, setSortBy] = useState("featured");
   const [priceRange, setPriceRange] = useState([0, 150000]);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [gridCols, setGridCols] = useState<2 | 4>(4);
   const { products } = useStorefrontProducts();
 
   const filteredProducts = useMemo(() => {
     let result = products.filter(
       (p) => p.category === categorySlug && p.subcategory === subcategorySlug
     );
-
-    result = result.filter(
-      (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
-    );
-
-    if (inStockOnly) {
-      result = result.filter((p) => p.inStock);
-    }
+    result = result.filter((p) => p.price >= priceRange[0] && p.price <= priceRange[1]);
+    if (inStockOnly) result = result.filter((p) => p.inStock);
 
     switch (sortBy) {
-      case "price-low":
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case "price-high":
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case "name":
-        result.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "rating":
-        result.sort((a, b) => b.rating - a.rating);
-        break;
+      case "price-low": result.sort((a, b) => a.price - b.price); break;
+      case "price-high": result.sort((a, b) => b.price - a.price); break;
+      case "name": result.sort((a, b) => a.name.localeCompare(b.name)); break;
+      case "rating": result.sort((a, b) => b.rating - a.rating); break;
       default:
         result = result.filter((p) => p.isFeatured).concat(result.filter((p) => !p.isFeatured));
     }
-
     return result;
   }, [products, categorySlug, subcategorySlug, priceRange, inStockOnly, sortBy]);
 
-  const clearFilters = () => {
-    setPriceRange([0, 150000]);
-    setInStockOnly(false);
-  };
-
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
       <Accordion type="single" collapsible defaultValue="price">
         <AccordionItem value="price">
           <AccordionTrigger>Price Range</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-4">
-              <Slider
-                value={priceRange}
-                onValueChange={setPriceRange}
-                min={0}
-                max={150000}
-                step={1000}
-              />
-              <div className="flex items-center justify-between text-sm">
+              <Slider value={priceRange} onValueChange={setPriceRange} min={0} max={150000} step={500} />
+              <div className="flex justify-between text-sm">
                 <span>{formatPrice(priceRange[0])}</span>
                 <span>{formatPrice(priceRange[1])}</span>
               </div>
@@ -95,30 +72,17 @@ export default function SubcategoryPageClient({ categorySlug, subcategorySlug }:
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-
       <div className="flex items-center space-x-2">
-        <Checkbox
-          id="inStock"
-          checked={inStockOnly}
-          onCheckedChange={(checked) => setInStockOnly(checked as boolean)}
-        />
-        <Label htmlFor="inStock" className="text-sm cursor-pointer">
-          In Stock Only
-        </Label>
+        <Checkbox id="inStock" checked={inStockOnly} onCheckedChange={(v) => setInStockOnly(v as boolean)} />
+        <Label htmlFor="inStock" className="text-sm cursor-pointer">In Stock Only</Label>
       </div>
-
-      <Button variant="outline" onClick={clearFilters} className="w-full">
+      <Button variant="outline" onClick={() => { setPriceRange([0, 150000]); setInStockOnly(false); }} className="w-full">
         Clear Filters
       </Button>
     </div>
   );
 
-  const gridColsClass = {
-    2: "grid-cols-2",
-    3: "grid-cols-2 md:grid-cols-3",
-    4: "grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
-    5: "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5",
-  };
+  const gridClass = { 2: "grid-cols-2", 4: "grid-cols-2 md:grid-cols-3 lg:grid-cols-4" };
 
   if (!category || !subcategory) {
     return (
@@ -126,16 +90,12 @@ export default function SubcategoryPageClient({ categorySlug, subcategorySlug }:
         <Navigation />
         <div className="container mx-auto px-4 py-20 text-center">
           <h1 className="text-2xl font-bold">Category not found</h1>
-          <Button asChild className="mt-4">
-            <Link href="/shop">Back to Shop</Link>
-          </Button>
+          <Button asChild className="mt-4"><Link href="/shop">Back to Shop</Link></Button>
         </div>
         <Footer />
       </main>
     );
   }
-
-  const isClonedFish = subcategorySlug === "cloned-fish";
 
   return (
     <main className="min-h-screen">
@@ -152,19 +112,10 @@ export default function SubcategoryPageClient({ categorySlug, subcategorySlug }:
             animate={{ opacity: 1, y: 0 }}
             className="text-center text-white"
           >
-            {isClonedFish && (
-              <Badge variant="coral" className="mb-4 animate-pulse">
-                🧬 REVOLUTIONARY CLONING TECHNOLOGY
-              </Badge>
-            )}
-            <Badge variant="secondary" className="mb-4 ml-2">{category.name}</Badge>
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              {subcategory.name}
-            </h1>
+            <Badge variant="secondary" className="mb-4">{category.name}</Badge>
+            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">{subcategory.name}</h1>
             <p className="text-white/80 max-w-2xl mx-auto">
-              {isClonedFish
-                ? "Experience genetically perfect specimens with guaranteed traits, coloration, and health. Our cloning technology ensures every fish is a masterpiece."
-                : `Explore our ${subcategory.name} collection from ${category.name}`}
+              Explore our {subcategory.name} collection from {category.name}
             </p>
           </motion.div>
         </div>
@@ -176,10 +127,9 @@ export default function SubcategoryPageClient({ categorySlug, subcategorySlug }:
             <aside className="hidden lg:block w-64 flex-shrink-0">
               <div className="sticky top-24 bg-card rounded-xl border p-6">
                 <h2 className="font-semibold mb-4 flex items-center gap-2">
-                  <SlidersHorizontal className="w-4 h-4" />
-                  Filters
+                  <SlidersHorizontal className="w-4 h-4" /> Filters
                 </h2>
-                <FilterContent />
+                {filterContent}
               </div>
             </aside>
 
@@ -189,57 +139,30 @@ export default function SubcategoryPageClient({ categorySlug, subcategorySlug }:
                   <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
                     <SheetTrigger asChild>
                       <Button variant="outline" className="lg:hidden">
-                        <Filter className="w-4 h-4 mr-2" />
-                        Filters
+                        <Filter className="w-4 h-4 mr-2" /> Filters
                       </Button>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="h-[80vh]">
-                      <SheetHeader>
-                        <SheetTitle>Filters</SheetTitle>
-                      </SheetHeader>
-                      <div className="mt-4 overflow-y-auto h-full pb-20">
-                        <FilterContent />
-                      </div>
+                      <SheetHeader><SheetTitle>Filters</SheetTitle></SheetHeader>
+                      <div className="mt-4 overflow-y-auto h-full pb-20">{filterContent}</div>
                     </SheetContent>
                   </Sheet>
-
-                  <p className="text-sm text-muted-foreground">
-                    {filteredProducts.length} products
-                  </p>
+                  <p className="text-sm text-muted-foreground">{filteredProducts.length} products</p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="hidden md:flex items-center border rounded-lg">
-                    <button
-                      onClick={() => setGridCols(2)}
-                      className={`p-2 ${gridCols === 2 ? "bg-muted" : ""}`}
-                    >
-                      <Grid className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setGridCols(4)}
-                      className={`p-2 ${gridCols === 4 ? "bg-muted" : ""}`}
-                    >
-                      <Grid3X3 className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue placeholder="Sort by" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="featured">Featured</SelectItem>
-                      <SelectItem value="price-low">Price: Low to High</SelectItem>
-                      <SelectItem value="price-high">Price: High to Low</SelectItem>
-                      <SelectItem value="rating">Top Rated</SelectItem>
-                      <SelectItem value="name">Name</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-40"><SelectValue placeholder="Sort by" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="featured">Featured</SelectItem>
+                    <SelectItem value="price-low">Price: Low to High</SelectItem>
+                    <SelectItem value="price-high">Price: High to Low</SelectItem>
+                    <SelectItem value="rating">Top Rated</SelectItem>
+                    <SelectItem value="name">Name</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
-              <div className={`grid ${gridColsClass[gridCols]} gap-4 md:gap-6`}>
+              <div className={`grid ${gridClass[gridCols]} gap-4 md:gap-6`}>
                 <AnimatePresence>
                   {filteredProducts.map((product, index) => (
                     <ProductCard key={product.id} product={product} index={index} />

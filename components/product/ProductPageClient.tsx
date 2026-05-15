@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCartStore, useWishlistStore } from "@/lib/store";
-import { birdsAndFishProducts } from "@/lib/birdsAndFishData";
 import { testimonials } from "@/lib/data";
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import type { Product } from "@/lib/store";
@@ -92,10 +91,6 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
   const allProducts = useMemo(() => {
     const merged = new Map<string, Product>();
     products.forEach((product) => merged.set(product.slug || product.id, product));
-    birdsAndFishProducts.forEach((product) => {
-      const key = product.slug || product.id;
-      if (!merged.has(key)) merged.set(key, product);
-    });
     return Array.from(merged.values());
   }, [products]);
   const product = allProducts.find((p) => p.slug === slug);

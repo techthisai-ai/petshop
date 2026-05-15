@@ -1,21 +1,16 @@
 import { categories } from "@/lib/data";
+import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import SubcategoryPageClient from "@/components/shop/SubcategoryPageClient";
 
-// Generate static params for all category/subcategory combinations
+const allCategories = [dogsAndCatsCategory, ...categories];
+
 export function generateStaticParams() {
   const params: { category: string; subcategory: string }[] = [];
-  
-  categories.forEach((category) => {
-    if (category.subcategories) {
-      category.subcategories.forEach((subcategory) => {
-        params.push({
-          category: category.slug,
-          subcategory: subcategory.slug,
-        });
-      });
-    }
+  allCategories.forEach((category) => {
+    category.subcategories?.forEach((sub) => {
+      params.push({ category: category.slug, subcategory: sub.slug });
+    });
   });
-  
   return params;
 }
 
@@ -24,10 +19,5 @@ interface PageProps {
 }
 
 export default function SubcategoryPage({ params }: PageProps) {
-  return (
-    <SubcategoryPageClient 
-      categorySlug={params.category} 
-      subcategorySlug={params.subcategory} 
-    />
-  );
+  return <SubcategoryPageClient categorySlug={params.category} subcategorySlug={params.subcategory} />;
 }

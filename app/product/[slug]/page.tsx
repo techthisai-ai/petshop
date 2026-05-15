@@ -1,11 +1,10 @@
 import { products } from "@/lib/data";
-import { birdsAndFishProducts } from "@/lib/birdsAndFishData";
 import ProductPageClient from "@/components/product/ProductPageClient";
 
-// Generate static params for all products (including birds & fish)
+// Generate static params for all products
 export function generateStaticParams() {
-  // Combine all products from both data sources
-  const allProducts = [...products, ...birdsAndFishProducts];
+  // Use all products from data
+  const allProducts = [...products];
   
   return allProducts.map((product) => ({
     slug: product.slug,

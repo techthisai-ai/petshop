@@ -41,7 +41,6 @@ export const birdsAndFishProducts: Product[] = [
     originalPrice: 699,
     images: [
       "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
-      "https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=800",
     ],
     description: "Adorable and playful Budgerigar, one of the most popular pet birds worldwide. Known for their ability to mimic speech and cheerful personalities. Perfect for beginners and experienced bird owners alike.",
     careGuide: "Cage: 18x18x18 inches minimum. Diet: Seeds, pellets, fresh fruits and vegetables. Lifespan: 5-10 years with proper care.",
@@ -148,7 +147,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "birds",
     price: 1299,
     images: [
-      "https://images.unsplash.com/photo-1591198936750-16d8e15edb9e?w=800",
+      "https://images.unsplash.com/photo-1520637836862-4d197d17c93a?w=800",
     ],
     description: "Melodious Canary birds famous for their beautiful singing. Males are particularly known for their elaborate songs. Available in various color varieties.",
     careGuide: "Cage: 18x18x24 inches. Diet: Canary seed, greens, egg food. Lifespan: 10-15 years.",
@@ -175,7 +174,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 8999,
     originalPrice: 10999,
     images: [
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
+      "https://images.unsplash.com/photo-1606567595334-d39972c85dfd?w=800",
     ],
     description: "Playful and cuddly Green-Cheeked Conure, one of the quieter conure species. Known for their acrobatic antics and loving personalities. Great apartment birds.",
     careGuide: "Cage: 24x24x30 inches. Diet: Pellets, fresh produce, nuts. Lifespan: 20-30 years.",
@@ -202,7 +201,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 25000,
     originalPrice: 30000,
     images: [
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
+      "https://images.unsplash.com/photo-1548767797-d8c844163c4a?w=800",
     ],
     description: "Stunning Sun Conure with vibrant yellow, orange, and red plumage. Extremely social and affectionate. Known for their loud calls but incredibly loyal companions.",
     careGuide: "Cage: 30x30x36 inches. Diet: Pellets, fruits, vegetables, nuts. Lifespan: 25-30 years.",
@@ -225,7 +224,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "birds",
     price: 4999,
     images: [
-      "https://images.unsplash.com/photo-1544923408-75c5cef46f14?w=800",
+      "https://images.unsplash.com/photo-1522926193341-e9ffd686c60f?w=800",
     ],
     description: "Tiny but mighty Parrotlets pack a big personality in a small package. These pocket parrots can learn to talk and are known for their bold, fearless nature.",
     careGuide: "Cage: 18x18x18 inches. Diet: Pellets, seeds, fresh foods. Lifespan: 15-20 years.",
@@ -252,7 +251,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 12000,
     originalPrice: 15000,
     images: [
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
+      "https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=800",
     ],
     description: "Elegant Indian Ringneck Parakeet known for exceptional talking ability. Males develop a distinctive neck ring. Available in stunning color mutations.",
     careGuide: "Cage: 24x24x36 inches. Diet: Pellets, seeds, fruits, vegetables. Lifespan: 25-30 years.",
@@ -279,7 +278,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 85000,
     originalPrice: 100000,
     images: [
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
+      "https://images.unsplash.com/photo-1516728778615-2d590ea1855e?w=800",
     ],
     description: "The Einstein of parrots! African Grey Parrots are renowned for their incredible intelligence and ability to learn extensive vocabulary. Exceptional companions for dedicated owners.",
     careGuide: "Cage: 36x24x48 inches. Diet: High-quality pellets, nuts, fresh produce. Lifespan: 40-60 years. Requires significant mental stimulation.",
@@ -307,7 +306,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "birds",
     price: 35000,
     images: [
-      "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=800",
+      "https://images.unsplash.com/photo-1559715541-5daf8a0296d0?w=800",
     ],
     description: "Spectacularly colorful Rainbow Lorikeet with vibrant blue, green, orange, and red plumage. Unique nectar-feeding diet. Playful and energetic personalities.",
     careGuide: "Cage: 36x24x36 inches. Diet: Specialized nectar/lorikeet diet, fresh fruits. Lifespan: 20-30 years. Messy feeders - easy-clean cage recommended.",
@@ -361,7 +360,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 149,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=800",
     ],
     description: "Hardy and adaptable Molly fish available in various colors. Great community fish that can tolerate slightly brackish water. Livebearers that breed easily.",
     careGuide: "Temperature: 72-82°F, pH: 7.5-8.5. Peaceful, can be kept in freshwater or brackish conditions.",
@@ -387,7 +386,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 79,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
     ],
     description: "Cheerful and colorful Platy fish, excellent for beginners. Hardy livebearers that come in a rainbow of colors and patterns.",
     careGuide: "Temperature: 70-82°F, pH: 7.0-8.2. Very peaceful, great community fish.",
@@ -414,6 +413,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 129,
     images: [
       "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=800",
     ],
     description: "Elegant Swordtail fish with distinctive elongated tail fin on males. Active swimmers that add movement and color to community tanks.",
     careGuide: "Temperature: 72-82°F, pH: 7.0-8.3. Active swimmers, need space to swim.",
@@ -439,7 +439,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 49,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "Stunning schooling fish with iridescent blue and red stripes. Cardinal Tetras have deeper red coloration. Best kept in groups of 6 or more.",
     careGuide: "Temperature: 73-81°F, pH: 5.5-7.0. Peaceful schooling fish, keep in groups.",
@@ -467,6 +467,7 @@ export const birdsAndFishProducts: Product[] = [
     originalPrice: 399,
     images: [
       "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "Classic and beloved Goldfish in various fancy varieties. Cold water fish that don't require heaters. Can live for decades with proper care.",
     careGuide: "Temperature: 65-75°F, pH: 7.0-8.0. Cold water fish, 20+ gallons per fish. Heavy feeders requiring good filtration.",
@@ -494,6 +495,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 499,
     originalPrice: 699,
     images: [
+      "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=800",
       "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
     ],
     description: "Magnificent Betta fish with flowing fins and vibrant colors. Known as Siamese Fighting Fish. Males must be kept separately. Wide variety of tail types available.",
@@ -576,7 +578,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 199,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
     ],
     description: "Adorable bottom-dwelling Corydoras catfish. Excellent tank cleaners that help keep substrate clean. Social fish that should be kept in groups of 6+.",
     careGuide: "Temperature: 72-79°F, pH: 6.0-8.0. Peaceful bottom dwellers. Keep on soft substrate.",
@@ -602,7 +604,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 349,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "Hardy algae-eating Bristlenose Pleco, perfect for controlling algae. Males develop distinctive bristles on nose. Stays smaller than common plecos.",
     careGuide: "Temperature: 73-81°F, pH: 6.5-7.5. Needs driftwood for digestion. Nocturnal.",
@@ -628,7 +630,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 149,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=800",
     ],
     description: "Active and hardy Danios, perfect for beginners. GloFish varieties glow under blue light! Zebra Danios have classic horizontal stripes.",
     careGuide: "Temperature: 64-77°F, pH: 6.5-7.5. Very active, need swimming space. Keep in groups.",
@@ -655,6 +657,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 79,
     images: [
       "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "Active and colorful Barb fish. Tiger Barbs have striking black stripes while Cherry Barbs display beautiful red coloration. Keep in groups to reduce fin nipping.",
     careGuide: "Temperature: 74-82°F, pH: 6.0-7.0. Keep in groups of 6+ to minimize aggression.",
@@ -680,7 +683,8 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "freshwater-fish",
     price: 299,
     images: [
-      "https://images.unsplash.com/photo-1520302630591-fd1c66edc19d?w=800",
+      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+      "https://images.unsplash.com/photo-1571752726703-5e7d1f6a986d?w=800",
     ],
     description: "Beautiful Dwarf Gourami with vibrant colors and peaceful temperament. Labyrinth fish that can breathe air. Males more colorful than females.",
     careGuide: "Temperature: 77-82°F, pH: 6.0-7.5. Peaceful, needs hiding spots and surface access.",
@@ -709,7 +713,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 999,
     originalPrice: 1299,
     images: [
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+      "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=800",
     ],
     description: "The famous 'Nemo' fish! Hardy and beautiful Ocellaris Clownfish perfect for beginner marine aquarists. Can be paired with anemones for a stunning display.",
     careGuide: "Temperature: 75-82°F, Salinity: 1.020-1.025. Hardy marine fish. Can host in anemones but not required.",
@@ -736,7 +740,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "marine-fish",
     price: 1499,
     images: [
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+      "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800",
     ],
     description: "Stunning Royal Gramma with vibrant purple and yellow coloration. Hardy and reef-safe. Often hides in caves and overhangs.",
     careGuide: "Temperature: 72-78°F, Salinity: 1.020-1.025. Needs hiding spots. Peaceful but territorial.",
@@ -783,7 +787,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 3999,
     originalPrice: 4999,
     images: [
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+      "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800",
     ],
     description: "Iconic Tang fish - Yellow Tang is bright sunshine yellow, Blue Tang (Dory) has striking blue coloration. Active swimmers that need large tanks.",
     careGuide: "Temperature: 75-82°F, Salinity: 1.020-1.025. Need large tanks with swimming room. Herbivores - provide algae.",
@@ -809,7 +813,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "marine-fish",
     price: 399,
     images: [
-      "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "Peaceful and active Green Chromis, perfect for schooling in reef tanks. Hardy and reef-safe. Best kept in groups of 5+.",
     careGuide: "Temperature: 75-82°F, Salinity: 1.020-1.025. Very peaceful, excellent community fish.",
@@ -834,7 +838,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 1999,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
     ],
     description: "High-quality glass aquarium tanks in various sizes. Crystal clear glass with polished edges. Suitable for freshwater and saltwater setups.",
     specifications: {
@@ -881,7 +885,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 599,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=800",
     ],
     description: "Fully submersible aquarium heater with precise temperature control. Auto shut-off for safety. Suitable for freshwater and saltwater.",
     specifications: {
@@ -904,7 +908,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 1499,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
     ],
     description: "Full spectrum LED light for aquariums. Programmable sunrise/sunset simulation. Promotes plant growth and enhances fish colors.",
     specifications: {
@@ -943,7 +947,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 499,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?w=800",
     ],
     description: "Premium aquarium substrate for healthy tank setup. Various options for different aquascape styles. Pre-washed and ready to use.",
     specifications: {
@@ -965,7 +969,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 699,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
     ],
     description: "Natural driftwood and aquascaping rocks for stunning tank decoration. Pre-cleaned and aquarium-safe. Creates natural hiding spots for fish.",
     variants: [
@@ -984,7 +988,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 349,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=800",
     ],
     description: "Essential water treatment for healthy aquariums. Removes chlorine/chloramine and adds beneficial bacteria for cycling.",
     inStock: true,
@@ -1000,7 +1004,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 199,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=800",
     ],
     description: "High-quality fish food for optimal health and color. Various formulations for different fish types. No cloudiness guaranteed.",
     variants: [
@@ -1036,7 +1040,7 @@ export const birdsAndFishProducts: Product[] = [
     price: 3999,
     originalPrice: 4999,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1535591273668-578e31182c4f?w=800",
     ],
     description: "Complete CO2 injection system for planted tanks. Includes regulator, solenoid, diffuser, and bubble counter. Essential for lush plant growth.",
     inStock: true,
@@ -1053,7 +1057,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 599,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800",
     ],
     description: "Accurate water testing kits for monitoring aquarium parameters. Essential for fish health and water quality management.",
     variants: [
@@ -1072,7 +1076,7 @@ export const birdsAndFishProducts: Product[] = [
     subcategory: "fish-accessories",
     price: 2999,
     images: [
-      "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=800",
+      "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800",
     ],
     description: "Essential protein skimmer for marine/saltwater aquariums. Removes organic waste before it breaks down. Available in nano and medium sizes.",
     variants: [

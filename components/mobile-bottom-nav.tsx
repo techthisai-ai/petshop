@@ -32,7 +32,7 @@ const navItems = [
     href: '/shop', 
     icon: Grid3X3,
     activeColor: 'from-emerald-500 to-teal-500',
-    additionalPaths: ['/birds-fish', '/product']
+    additionalPaths: ['/product']
   },
   { 
     name: 'Cart', 

@@ -26,7 +26,6 @@ import { Badge } from "@/components/ui/badge";
 import { useCartStore, useWishlistStore, useUIStore } from "@/lib/store";
 import { useAuthStore } from "@/store/useAuthStore";
 import { categories } from "@/lib/data";
-import { birdsAndFishCategory } from "@/lib/birdsAndFishData";
 import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import { cn } from "@/lib/utils";
 import { CartDrawer } from "./cart-drawer";
@@ -35,9 +34,8 @@ import { isAdminEmail } from "@/lib/authConfig";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Shop", href: "/shop", hasDropdown: true },
-  { name: "🐦 Birds & Fish", href: "/birds-fish", highlight: true, isNew: true },
-  { name: "🐾 Dogs & Cats", href: "/dogs-cats", highlight: true, isDogsCats: true },
-  { name: "Cloned Fish", href: "/shop/aquarium-fish/cloned-fish" },
+  { name: " Dogs & Cats", href: "/dogs-cats", highlight: true, isDogsCats: true },
+  { name: "Cloned Fish", href: "/shop/aquarium-fish" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ];
@@ -45,8 +43,7 @@ const navLinks = [
 const priorityRoutes = [
   "/",
   "/shop",
-  "/birds-fish",
-  "/shop/aquarium-fish/cloned-fish",
+  "/shop/aquarium-fish",
   "/blog",
   "/contact",
   "/account",
@@ -110,7 +107,7 @@ export function Navigation() {
         prefetchedRoutes.current.add(href);
         router.prefetch(href);
       });
-    }, 1200);
+    }, 40);
 
     return () => window.clearTimeout(timer);
   }, [router]);
@@ -271,30 +268,6 @@ export function Navigation() {
                                       href={`/shop/dogs-cats/${sub.slug}`}
                                       onMouseEnter={() => prefetchRoute(`/shop/dogs-cats/${sub.slug}`)}
                                       className="text-xs bg-white px-2 py-1 rounded-full text-amber-600 hover:bg-amber-100 transition-colors"
-                                    >
-                                      {sub.name}
-                                    </Link>
-                                  ))}
-                                </div>
-                              </div>
-                              {/* Birds & Fish Category - Featured */}
-                              <div className="col-span-2 bg-gradient-to-r from-cyan-50 to-emerald-50 p-4 rounded-xl mb-4">
-                                <Link
-                                  href="/birds-fish"
-                                  onMouseEnter={() => prefetchRoute("/birds-fish")}
-                                  className="font-semibold text-sm mb-2 flex items-center gap-2 text-cyan-700 hover:text-cyan-600 transition-colors"
-                                >
-                                  🐦 Birds & Fish 🐟
-                                  <Badge className="bg-emerald-500 text-white text-[10px]">NEW</Badge>
-                                </Link>
-                                <p className="text-xs text-gray-600 mb-2">Premium birds and exotic aquarium fish</p>
-                                <div className="flex gap-2 flex-wrap">
-                                  {birdsAndFishCategory.subcategories?.map((sub) => (
-                                    <Link
-                                      key={sub.slug}
-                                      href={`/birds-fish?type=${sub.slug}`}
-                                      onMouseEnter={() => prefetchRoute("/birds-fish")}
-                                      className="text-xs bg-white px-2 py-1 rounded-full text-cyan-600 hover:bg-cyan-100 transition-colors"
                                     >
                                       {sub.name}
                                     </Link>
@@ -621,17 +594,6 @@ export function Navigation() {
                         ))}
                       </div>
                     </div>
-                    {/* Birds & Fish - Featured */}
-                    <Link
-                      href="/birds-fish"
-                      onClick={toggleMobileMenu}
-                      className="col-span-2 px-3 py-3 text-sm bg-gradient-to-r from-cyan-50 to-emerald-50 rounded-lg hover:from-cyan-100 hover:to-emerald-100 flex items-center justify-between"
-                    >
-                      <span className="flex items-center gap-2 text-cyan-700 font-medium">
-                        🐦 Birds & Fish 🐟
-                      </span>
-                      <Badge className="bg-emerald-500 text-white text-xs">NEW</Badge>
-                    </Link>
                     {categories.map((category) => (
                       <div key={category.id} className="rounded-lg bg-muted p-3">
                         <Link

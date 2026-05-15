@@ -14,185 +14,77 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
-import { birdsAndFishProducts } from '@/lib/birdsAndFishData'
+
 import { formatPrice } from '@/lib/utils'
 
 interface Message {
   id: string
   type: 'user' | 'bot'
   content: string
-  products?: typeof birdsAndFishProducts
+  products?: any
   timestamp: Date
 }
 
 // Quick action buttons
 const quickActions = [
-  { label: '🐟 Show Fish', query: 'show me fish' },
-  { label: '🐦 Show Birds', query: 'show me birds' },
-  { label: '💰 Best Deals', query: 'best deals' },
+  { label: '� Best Deals', query: 'best deals' },
   { label: '✨ New Arrivals', query: 'new arrivals' },
   { label: '🏆 Best Sellers', query: 'best sellers' },
   { label: '📦 Shipping Info', query: 'shipping information' },
+  { label: '📞 Contact Us', query: 'contact' },
+  { label: '❓ Help', query: 'help' },
 ]
 
 // Bot responses based on keywords
-const getBotResponse = (query: string): { message: string; products?: typeof birdsAndFishProducts } => {
+const getBotResponse = (query: string): { message: string; products?: any } => {
   const lowerQuery = query.toLowerCase()
   
   // Greetings
   if (lowerQuery.match(/^(hi|hello|hey|hola|namaste)/)) {
     return {
-      message: "Hello! 👋 Welcome to Rainbow Aqua! I'm Bubbles, your friendly pet assistant. How can I help you today?\n\nYou can ask me about:\n🐟 Fish (Freshwater & Marine)\n🐦 Birds\n🎯 Accessories\n💰 Prices & Deals\n📦 Shipping & Orders"
-    }
-  }
-
-  // Show all fish
-  if (lowerQuery.includes('fish') && (lowerQuery.includes('show') || lowerQuery.includes('list') || lowerQuery.includes('all'))) {
-    const fishProducts = birdsAndFishProducts.filter(p => 
-      p.subcategory === 'freshwater-fish' || p.subcategory === 'marine-fish'
-    ).slice(0, 6)
-    return {
-      message: "🐟 Here are our amazing fish! We have both freshwater and marine varieties:",
-      products: fishProducts
-    }
-  }
-
-  // Show freshwater fish
-  if (lowerQuery.includes('freshwater')) {
-    const freshwaterFish = birdsAndFishProducts.filter(p => p.subcategory === 'freshwater-fish').slice(0, 6)
-    return {
-      message: "🐠 Here are our freshwater fish - perfect for beginners and experts alike!",
-      products: freshwaterFish
-    }
-  }
-
-  // Show marine fish
-  if (lowerQuery.includes('marine') || lowerQuery.includes('saltwater')) {
-    const marineFish = birdsAndFishProducts.filter(p => p.subcategory === 'marine-fish').slice(0, 6)
-    return {
-      message: "🌊 Check out our stunning marine fish collection!",
-      products: marineFish
-    }
-  }
-
-  // Show birds
-  if (lowerQuery.includes('bird') && (lowerQuery.includes('show') || lowerQuery.includes('list') || lowerQuery.includes('all'))) {
-    const birdProducts = birdsAndFishProducts.filter(p => p.subcategory === 'birds').slice(0, 6)
-    return {
-      message: "🐦 Here are our beautiful feathered friends!",
-      products: birdProducts
-    }
-  }
-
-  // Show accessories
-  if (lowerQuery.includes('accessor') || lowerQuery.includes('equipment') || lowerQuery.includes('tank') || lowerQuery.includes('filter')) {
-    const accessories = birdsAndFishProducts.filter(p => p.subcategory === 'fish-accessories').slice(0, 6)
-    return {
-      message: "🎯 Here are essential accessories for your aquarium!",
-      products: accessories
+      message: "Hello! 👋 Welcome to Rainbow Aqua! I'm Bubbles, your friendly pet assistant. How can I help you today?\n\nYou can ask me about:\n🛒 Products & Shop\n💰 Prices & Deals\n📦 Shipping & Orders\n💡 Care Tips\n📞 Support"
     }
   }
 
   // Best deals / discounts
   if (lowerQuery.includes('deal') || lowerQuery.includes('discount') || lowerQuery.includes('offer') || lowerQuery.includes('sale')) {
-    const dealsProducts = birdsAndFishProducts
-      .filter(p => p.originalPrice && p.originalPrice > p.price)
-      .sort((a, b) => {
-        const discountA = ((a.originalPrice! - a.price) / a.originalPrice!) * 100
-        const discountB = ((b.originalPrice! - b.price) / b.originalPrice!) * 100
-        return discountB - discountA
-      })
-      .slice(0, 6)
     return {
-      message: "💰 Check out our best deals with amazing discounts!",
-      products: dealsProducts
+      message: "💰 Check out our shop for amazing discounts and special offers!\n\nVisit /shop to browse all our products with current deals."
     }
   }
 
   // New arrivals
   if (lowerQuery.includes('new') && (lowerQuery.includes('arrival') || lowerQuery.includes('latest'))) {
-    const newProducts = birdsAndFishProducts.filter(p => p.isNew).slice(0, 6)
     return {
-      message: "✨ Fresh arrivals just for you! Check out what's new:",
-      products: newProducts
+      message: "✨ Fresh arrivals just for you!\n\nVisit /shop to see what's new in our collection."
     }
   }
 
   // Best sellers
   if (lowerQuery.includes('best') && (lowerQuery.includes('seller') || lowerQuery.includes('popular'))) {
-    const bestSellers = birdsAndFishProducts.filter(p => p.tags?.includes('best-seller')).slice(0, 6)
     return {
-      message: "🏆 Our most popular products that customers love!",
-      products: bestSellers
-    }
-  }
-
-  // Betta fish specific
-  if (lowerQuery.includes('betta')) {
-    const bettaProducts = birdsAndFishProducts.filter(p => 
-      p.name.toLowerCase().includes('betta')
-    ).slice(0, 4)
-    return {
-      message: "🐠 Betta fish are stunning! Here are our beautiful Bettas with various tail types:",
-      products: bettaProducts
-    }
-  }
-
-  // Goldfish specific
-  if (lowerQuery.includes('goldfish') || lowerQuery.includes('gold fish')) {
-    const goldfishProducts = birdsAndFishProducts.filter(p => 
-      p.name.toLowerCase().includes('goldfish')
-    ).slice(0, 4)
-    return {
-      message: "🐟 Classic and beautiful! Check out our Goldfish varieties:",
-      products: goldfishProducts
-    }
-  }
-
-  // Parrot / African Grey
-  if (lowerQuery.includes('parrot') || lowerQuery.includes('african grey')) {
-    const parrotProducts = birdsAndFishProducts.filter(p => 
-      p.name.toLowerCase().includes('parrot') || p.name.toLowerCase().includes('african grey')
-    ).slice(0, 4)
-    return {
-      message: "🦜 Parrots are incredibly intelligent! Here are our options:",
-      products: parrotProducts
-    }
-  }
-
-  // Budgie / Parakeet
-  if (lowerQuery.includes('budgie') || lowerQuery.includes('parakeet')) {
-    const budgieProducts = birdsAndFishProducts.filter(p => 
-      p.name.toLowerCase().includes('budgie') || p.name.toLowerCase().includes('parakeet')
-    ).slice(0, 4)
-    return {
-      message: "🐦 Budgies make wonderful companions! Here are our colorful options:",
-      products: budgieProducts
+      message: "🏆 Our most popular products that customers love!\n\nCheck /shop to browse bestsellers."
     }
   }
 
   // Price related
   if (lowerQuery.includes('price') || lowerQuery.includes('cost') || lowerQuery.includes('cheap') || lowerQuery.includes('affordable')) {
-    const affordableProducts = birdsAndFishProducts
-      .sort((a, b) => a.price - b.price)
-      .slice(0, 6)
     return {
-      message: "💵 Here are our most affordable options to start your pet journey:",
-      products: affordableProducts
+      message: "💵 Browse our shop for products at various price points.\n\nVisit /shop to find options that fit your budget!"
     }
   }
 
   // Shipping info
   if (lowerQuery.includes('ship') || lowerQuery.includes('delivery') || lowerQuery.includes('deliver')) {
     return {
-      message: "📦 **Shipping Information:**\n\n🚚 Free shipping on orders over ₹2,000\n⏱️ Delivery within 2-5 business days\n🐟 Live fish shipped with oxygen packs\n🐦 Birds delivered with care crates\n📍 We deliver across Tamil Nadu!\n\nNeed help with a specific order? Contact us at +91 98765 43210"
+      message: "📦 **Shipping Information:**\n\n🚚 Free shipping on orders over ₹2,000\n⏱️ Delivery within 2-5 business days\n📍 We deliver across Tamil Nadu!\n\nNeed help with a specific order? Contact us at +91 98765 43210"
     }
   }
 
   // Returns / refunds
   if (lowerQuery.includes('return') || lowerQuery.includes('refund') || lowerQuery.includes('exchange')) {
     return {
-      message: "🔄 **Returns & Refunds:**\n\n✅ 7-day live arrival guarantee\n✅ Full refund for DOA (Dead on Arrival)\n✅ Photo/video required within 2 hours of delivery\n✅ Easy exchange process\n\nContact our support team for any concerns!"
+      message: "🔄 **Returns & Refunds:**\n\n✅ 7-day return policy\n✅ Photo/video documentation may be required\n✅ Easy exchange process\n\nContact our support team for any concerns!"
     }
   }
 
@@ -206,14 +98,14 @@ const getBotResponse = (query: string): { message: string; products?: typeof bir
   // Care tips
   if (lowerQuery.includes('care') || lowerQuery.includes('tips') || lowerQuery.includes('how to')) {
     return {
-      message: "💡 **Pet Care Tips:**\n\n🐟 **Fish Care:**\n• Change 25% water weekly\n• Don't overfeed\n• Test water parameters regularly\n\n🐦 **Bird Care:**\n• Fresh water daily\n• Varied diet with seeds & fruits\n• Regular cage cleaning\n\nWant specific care guides? Just ask about any pet!"
+      message: "💡 **Pet Care Tips:**\n\nProper care ensures your pets stay healthy and happy. For specific care guides on our products, please visit our /blog or contact our support team.\n\nWe're always happy to provide expert advice!"
     }
   }
 
   // Thank you
   if (lowerQuery.includes('thank') || lowerQuery.includes('thanks')) {
     return {
-      message: "You're welcome! 😊 It was my pleasure helping you. If you have any more questions about our pets or products, feel free to ask anytime!\n\n🐟🐦 Happy pet parenting! 🐦🐟"
+      message: "You're welcome! 😊 It was my pleasure helping you. If you have any more questions, feel free to ask anytime!\n\nUse code **AQUAFIRST50** for 25% off your first order! 🎉"
     }
   }
 
@@ -224,145 +116,71 @@ const getBotResponse = (query: string): { message: string; products?: typeof bir
     }
   }
 
-  // Search for specific product
-  const searchResults = birdsAndFishProducts.filter(p => 
-    p.name.toLowerCase().includes(lowerQuery) ||
-    p.description.toLowerCase().includes(lowerQuery) ||
-    p.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  ).slice(0, 4)
-
-  if (searchResults.length > 0) {
-    return {
-      message: `🔍 Found ${searchResults.length} products matching "${query}":`,
-      products: searchResults
-    }
-  }
-
   // Default response
   return {
-    message: "I'm not sure I understood that. Here are some things I can help you with:\n\n🐟 \"Show me fish\" - Browse our fish collection\n🐦 \"Show me birds\" - See our bird varieties\n💰 \"Best deals\" - Find discounted products\n📦 \"Shipping info\" - Delivery details\n📞 \"Contact\" - Get in touch with us\n\nOr simply type what you're looking for!"
+    message: "I'm here to help! You can ask me about:\n\n🛒 Products & shopping\n💰 Deals & discounts\n📦 Shipping & delivery\n💡 Pet care tips\n📞 Contact & support\n\nOr visit /shop to browse our full collection!"
   }
 }
 
-const getCleanBotResponse = (query: string): { message: string; products?: typeof birdsAndFishProducts } => {
+const getCleanBotResponse = (query: string): { message: string; products?: any } => {
   const lowerQuery = query.toLowerCase()
 
   if (lowerQuery.match(/^(hi|hello|hey|hola|namaste)/)) {
     return {
-      message: "Hello! Welcome to Rainbow Aqua. I can help with fish, birds, accessories, prices, deals, shipping, returns, and order support."
-    }
-  }
-
-  if (lowerQuery.includes('fish') && (lowerQuery.includes('show') || lowerQuery.includes('list') || lowerQuery.includes('all'))) {
-    return {
-      message: "Here are our available fish, including freshwater and marine varieties:",
-      products: birdsAndFishProducts.filter(p => p.subcategory === 'freshwater-fish' || p.subcategory === 'marine-fish').slice(0, 6)
-    }
-  }
-
-  if (lowerQuery.includes('freshwater')) {
-    return {
-      message: "Here are our freshwater fish options:",
-      products: birdsAndFishProducts.filter(p => p.subcategory === 'freshwater-fish').slice(0, 6)
-    }
-  }
-
-  if (lowerQuery.includes('marine') || lowerQuery.includes('saltwater')) {
-    return {
-      message: "Here are our marine fish options:",
-      products: birdsAndFishProducts.filter(p => p.subcategory === 'marine-fish').slice(0, 6)
-    }
-  }
-
-  if (lowerQuery.includes('bird') && (lowerQuery.includes('show') || lowerQuery.includes('list') || lowerQuery.includes('all'))) {
-    return {
-      message: "Here are our bird options:",
-      products: birdsAndFishProducts.filter(p => p.subcategory === 'birds').slice(0, 6)
-    }
-  }
-
-  if (lowerQuery.includes('accessor') || lowerQuery.includes('equipment') || lowerQuery.includes('tank') || lowerQuery.includes('filter')) {
-    return {
-      message: "Here are essential aquarium accessories:",
-      products: birdsAndFishProducts.filter(p => p.subcategory === 'fish-accessories').slice(0, 6)
+      message: "Hello! Welcome to Rainbow Aqua. I can help with products, prices, deals, shipping, returns, and support."
     }
   }
 
   if (lowerQuery.includes('deal') || lowerQuery.includes('discount') || lowerQuery.includes('offer') || lowerQuery.includes('sale')) {
     return {
-      message: "Here are the best current deals:",
-      products: birdsAndFishProducts
-        .filter(p => p.originalPrice && p.originalPrice > p.price)
-        .sort((a, b) => ((b.originalPrice! - b.price) / b.originalPrice!) - ((a.originalPrice! - a.price) / a.originalPrice!))
-        .slice(0, 6)
+      message: "Great deals available! Visit our shop to browse current promotions."
     }
   }
 
   if (lowerQuery.includes('new') && (lowerQuery.includes('arrival') || lowerQuery.includes('latest'))) {
     return {
-      message: "Here are the newest arrivals:",
-      products: birdsAndFishProducts.filter(p => p.isNew).slice(0, 6)
+      message: "Check out our latest arrivals in the shop!"
     }
   }
 
   if (lowerQuery.includes('best') && (lowerQuery.includes('seller') || lowerQuery.includes('popular'))) {
     return {
-      message: "Here are our most popular products:",
-      products: birdsAndFishProducts.filter(p => p.tags?.includes('best-seller')).slice(0, 6)
+      message: "Our bestsellers are waiting for you in the shop!"
     }
   }
 
   if (lowerQuery.includes('ship') || lowerQuery.includes('delivery') || lowerQuery.includes('deliver')) {
     return {
-      message: "Shipping information:\n\nFree shipping on orders over Rs. 2,000.\nDelivery usually takes 2-5 business days.\nLive fish are shipped with oxygen packs.\nFor order help, contact +91 98765 43210."
+      message: "Free shipping on orders over Rs. 2,000. Delivery usually takes 2-5 business days. For order help, contact +91 98765 43210."
     }
   }
 
   if (lowerQuery.includes('return') || lowerQuery.includes('refund') || lowerQuery.includes('exchange')) {
     return {
-      message: "Returns and refunds:\n\nEligible unused products can be returned within 7 days. For live fish issues, send clear photos or video within 2 hours of delivery so support can review a replacement or refund."
+      message: "Eligible unused products can be returned within 7 days. For specific issues, send photos/video and contact support."
     }
   }
 
   if (lowerQuery.includes('contact') || lowerQuery.includes('phone') || lowerQuery.includes('call') || lowerQuery.includes('support')) {
     return {
-      message: "Contact support:\n\nPhone: +91 98765 43210\nEmail: hello@rainbowaqua.in\nHours: 9 AM - 8 PM, Monday to Saturday."
+      message: "Contact support: Phone: +91 98765 43210, Email: hello@rainbowaqua.in, Hours: 9 AM - 8 PM, Monday to Saturday."
     }
   }
 
   if (lowerQuery.includes('care') || lowerQuery.includes('tips') || lowerQuery.includes('how to')) {
     return {
-      message: "Care tips:\n\nFish: change part of the water weekly, avoid overfeeding, and test water regularly.\nBirds: provide fresh water daily, a varied diet, and regular cage cleaning.\nAsk about a specific pet for more targeted help."
+      message: "For pet care guides, visit our blog or contact our support team for expert advice."
     }
   }
 
-  if (lowerQuery.includes('thank') || lowerQuery.includes('thanks')) {
+  if (lowerQuery.includes('price') || lowerQuery.includes('cost') || lowerQuery.includes('cheap') || lowerQuery.includes('affordable')) {
     return {
-      message: "You're welcome. Ask anytime if you need help with products, shipping, returns, or care."
-    }
-  }
-
-  if (lowerQuery.includes('bye') || lowerQuery.includes('goodbye')) {
-    return {
-      message: "Goodbye, and thanks for visiting Rainbow Aqua."
-    }
-  }
-
-  const products = birdsAndFishProducts.filter(p =>
-    p.name.toLowerCase().includes(lowerQuery) ||
-    p.description.toLowerCase().includes(lowerQuery) ||
-    p.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-  ).slice(0, 4)
-
-  if (products.length > 0) {
-    return {
-      message: `Found ${products.length} products matching "${query}":`,
-      products
+      message: "Check our shop for products at various price points!"
     }
   }
 
   return {
-    message: "I can help with fish, birds, accessories, prices, best deals, shipping, returns, contact details, or care tips. Try asking for one of those."
+    message: "I can help with products, pricing, shipping, returns, contact details, and more. Visit /shop to browse!"
   }
 }
 
@@ -373,7 +191,7 @@ export function ChatBot() {
     {
       id: '1',
       type: 'bot',
-      content: "Hi, I'm Bubbles from Rainbow Aqua. I can help with fish, birds, accessories, prices, shipping, returns, and care questions.",
+      content: "Hi, I'm Bubbles from Rainbow Aqua. I can help with products, prices, deals, shipping, returns, and support!",
       timestamp: new Date()
     }
   ])
@@ -645,20 +463,6 @@ export function ChatBot() {
                                 </Link>
                               </motion.div>
                             ))}
-                            {/* View All Button */}
-                            <Link
-                              href="/birds-fish"
-                              onClick={() => setIsOpen(false)}
-                              className="block"
-                            >
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                className="w-full text-xs h-8 border-cyan-200 text-cyan-600 hover:bg-cyan-50"
-                              >
-                                View All Products →
-                              </Button>
-                            </Link>
                           </div>
                         )}
                       </div>

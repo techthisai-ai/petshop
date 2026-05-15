@@ -15,6 +15,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { categories } from "@/lib/data";
+import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
+
+const allCategories = [dogsAndCatsCategory, ...categories];
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
@@ -24,7 +27,7 @@ interface CategoryPageClientProps {
 }
 
 export default function CategoryPageClient({ categorySlug }: CategoryPageClientProps) {
-  const category = categories.find((c) => c.slug === categorySlug);
+  const category = allCategories.find((c) => c.slug === categorySlug);
 
   const [gridCols, setGridCols] = useState<2 | 3 | 4 | 5>(4);
   const [sortBy, setSortBy] = useState("featured");
@@ -86,7 +89,7 @@ export default function CategoryPageClient({ categorySlug }: CategoryPageClientP
     setInStockOnly(false);
   };
 
-  const FilterContent = () => (
+  const filterContent = (
     <div className="space-y-6">
       {category?.subcategories && (
         <Accordion type="single" collapsible defaultValue="subcategories">
@@ -207,7 +210,7 @@ export default function CategoryPageClient({ categorySlug }: CategoryPageClientP
                   <SlidersHorizontal className="w-4 h-4" />
                   Filters
                 </h2>
-                <FilterContent />
+                {filterContent}
               </div>
             </aside>
 
@@ -226,7 +229,7 @@ export default function CategoryPageClient({ categorySlug }: CategoryPageClientP
                         <SheetTitle>Filters</SheetTitle>
                       </SheetHeader>
                       <div className="mt-4 overflow-y-auto h-full pb-20">
-                        <FilterContent />
+                        {filterContent}
                       </div>
                     </SheetContent>
                   </Sheet>

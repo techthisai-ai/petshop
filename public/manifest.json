@@ -89,12 +89,6 @@
       "url": "/shop/aquarium-fish",
       "icons": [{ "src": "/icons/fish.png", "sizes": "96x96", "type": "image/png" }]
     },
-    {
-      "name": "Birds & Fish",
-      "short_name": "Birds",
-      "description": "Browse birds and fish",
-      "url": "/birds-fish",
-      "icons": [{ "src": "/icons/pets.png", "sizes": "96x96", "type": "image/png" }]
-    }
+
   ]
 }

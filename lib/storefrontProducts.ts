@@ -7,12 +7,10 @@ import type { Product } from "./store";
 import type { DBProduct } from "./firebaseService";
 import { FIREBASE_PRODUCT_TAG } from "./productLinks";
 import { dogsAndCatsProducts } from "./dogsAndCatsData";
-import { birdsAndFishProducts } from "./birdsAndFishData";
 
 // ── Static product base — always available synchronously ──────────────
 export const staticProducts: Product[] = [
   ...dogsAndCatsProducts,
-  ...birdsAndFishProducts,
 ];
 
 // ── Firestore normalisation helpers ───────────────────────────────────

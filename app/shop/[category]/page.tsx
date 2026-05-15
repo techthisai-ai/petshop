@@ -1,9 +1,11 @@
 import { categories } from "@/lib/data";
+import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import CategoryPageClient from "@/components/shop/CategoryPageClient";
 
-// Generate static params for all categories
+const allCategories = [dogsAndCatsCategory, ...categories];
+
 export function generateStaticParams() {
-  return categories.map((category) => ({
+  return allCategories.map((category) => ({
     category: category.slug,
   }));
 }
