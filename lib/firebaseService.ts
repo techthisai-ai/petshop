@@ -377,6 +377,49 @@ export async function updateProductInDB(productId: string, updates: Partial<DBPr
   })
 }
 
+export async function saveReview(review: {
+  userId: string
+  userName: string
+  orderId: string
+  productId: string
+  productName: string
+  rating: number
+  text: string
+}) {
+  const ref = await addDoc(collection(db, 'reviews'), {
+    ...review,
+    createdAt: serverTimestamp(),
+  })
+  return ref.id
+}
+
+export interface DBReview {
+  id: string
+  userId: string
+  userName: string
+  orderId: string
+  productId: string
+  productName: string
+  rating: number
+  text: string
+  createdAt: string
+}
+
+export async function getProductReviews(productId: string): Promise<DBReview[]> {
+  const q = query(
+    collection(db, 'reviews'),
+    where('productId', '==', productId)
+  )
+  const snap = await getDocs(q)
+  return snap.docs.map((d) => ({
+    ...d.data(),
+    id: d.id,
+    createdAt: timestampToISO(d.data().createdAt),
+  })).sort((a, b) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  ) as DBReview[]
+}
+
 // ── Storage: upload image ─────────────────────────────────────────────
 // Converts image to base64 data URL and stores directly in Firestore
 // This completely bypasses Firebase Storage and avoids all CORS issues

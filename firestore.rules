@@ -37,5 +37,12 @@ service cloud.firestore {
       allow read, write: if isSignedIn() && request.auth.uid == userId;
       allow read, write: if isOwner();
     }
+
+    // Reviews — signed-in users create their own, public read, owner full access
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow write, delete: if isOwner();
+    }
   }
 }

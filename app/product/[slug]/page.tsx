@@ -1,14 +1,11 @@
 import { products } from "@/lib/data";
+import { dogsAndCatsProducts } from "@/lib/dogsAndCatsData";
 import ProductPageClient from "@/components/product/ProductPageClient";
 
-// Generate static params for all products
 export function generateStaticParams() {
-  // Use all products from data
-  const allProducts = [...products];
-  
-  return allProducts.map((product) => ({
-    slug: product.slug,
-  }));
+  return [...products, ...dogsAndCatsProducts]
+    .filter((p) => Boolean(p.slug))
+    .map((p) => ({ slug: p.slug }));
 }
 
 interface PageProps {

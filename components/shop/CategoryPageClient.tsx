@@ -16,11 +16,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { categories } from "@/lib/data";
 import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
-
-const allCategories = [dogsAndCatsCategory, ...categories];
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
+
+const allCategories = [dogsAndCatsCategory, ...categories];
 
 interface CategoryPageClientProps {
   categorySlug: string;

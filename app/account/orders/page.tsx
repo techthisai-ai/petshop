@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
+import ReviewModal from "@/components/ui/ReviewModal";
 
 const statusClass: Record<string, string> = {
   delivered: "bg-green-100 text-green-700",
@@ -33,10 +34,17 @@ export default function AccountOrdersPage() {
   const fetchMyOrders = useAuthStore((state) => state.fetchMyOrders);
   const myOrders = currentUser ? orders.filter((order) => order.userId === currentUser.id) : [];
 
+  const [reviewTarget, setReviewTarget] = useState<{
+    orderId: string;
+    productId: string;
+    productName: string;
+  } | null>(null);
+
   useEffect(() => {
     if (isAuthenticated && currentUser) {
       fetchMyOrders();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, currentUser?.id]);
 
   return (
@@ -74,6 +82,21 @@ export default function AccountOrdersPage() {
                     <Badge className={statusClass[order.status] ?? "bg-gray-100 text-gray-700"}>
                       {displayStatus(order.status)}
                     </Badge>
+                    {order.status === "delivered" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          setReviewTarget({
+                            orderId: order.id,
+                            productId: order.items[0]?.productId ?? "",
+                            productName: order.items[0]?.productName ?? "Product",
+                          })
+                        }
+                      >
+                        ⭐ Write Review
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -92,6 +115,16 @@ export default function AccountOrdersPage() {
         </div>
       </section>
       <Footer />
+
+      {reviewTarget && (
+        <ReviewModal
+          open={!!reviewTarget}
+          onClose={() => setReviewTarget(null)}
+          orderId={reviewTarget.orderId}
+          productId={reviewTarget.productId}
+          productName={reviewTarget.productName}
+        />
+      )}
     </main>
   );
 }

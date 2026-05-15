@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -25,11 +25,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCartStore, useWishlistStore } from "@/lib/store";
-import { testimonials } from "@/lib/data";
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import type { Product } from "@/lib/store";
 import { formatPrice, getDiscountPercentage } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
+import { getProductReviews, type DBReview } from "@/lib/firebaseService";
 
 const titleCase = (value: string) =>
   value
@@ -98,6 +98,14 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
+  const [firestoreReviews, setFirestoreReviews] = useState<DBReview[]>([]);
+
+  useEffect(() => {
+    if (!product) return;
+    getProductReviews(product.id)
+      .then(setFirestoreReviews)
+      .catch(() => {});
+  }, [product?.id]);
 
   const { addItem, toggleCart } = useCartStore();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
@@ -145,12 +153,6 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
   const productType = product.subcategory ? titleCase(product.subcategory) : titleCase(product.category);
   const productWeight = getSpecValue(displaySpecifications, ["Weight", "Quantity", "Net Weight", "Pack Size"]);
   const productSize = getSpecValue(displaySpecifications, ["Size", "Flow Rate", "Power"]);
-  const productReviews = testimonials
-    .filter((review) =>
-      review.product.toLowerCase().includes(product.name.toLowerCase()) ||
-      product.name.toLowerCase().includes(review.product.toLowerCase())
-    );
-  const displayReviews = (productReviews.length > 0 ? productReviews : testimonials).slice(0, 3);
 
   const handleAddToCart = () => {
     addItem(product, quantity, selectedVariants);
@@ -475,37 +477,40 @@ export default function ProductPageClient({ slug }: ProductPageClientProps) {
             <TabsContent value="reviews" className="mt-6">
               <div className="bg-card rounded-xl p-6 border">
                 <h3 className="text-xl font-semibold mb-4">Customer Reviews</h3>
-                <div className="grid gap-4 md:grid-cols-3">
-                  {displayReviews.map((review) => (
-                    <article key={review.id} className="rounded-lg border bg-background p-4">
-                      <div className="flex items-center gap-3">
-                        <Image
-                          src={review.avatar}
-                          alt={review.name}
-                          width={40}
-                          height={40}
-                          className="h-10 w-10 rounded-full object-cover"
-                        />
-                        <div>
-                          <p className="font-medium">{review.name}</p>
-                          <p className="text-xs text-muted-foreground">{review.location}</p>
+                {firestoreReviews.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">No reviews yet. Be the first to review this product!</p>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {firestoreReviews.map((review) => (
+                      <article key={review.id} className="rounded-lg border bg-background p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            {review.userName.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-medium">{review.userName}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(review.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-3 flex items-center gap-1">
-                        {[...Array(5)].map((_, index) => (
-                          <Star
-                            key={index}
-                            className={`h-4 w-4 ${
-                              index < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <p className="mt-3 text-sm text-muted-foreground">&quot;{review.text}&quot;</p>
-                      <p className="mt-3 text-xs font-medium text-secondary">{review.product}</p>
-                    </article>
-                  ))}
-                </div>
+                        <div className="mt-3 flex items-center gap-1">
+                          {[...Array(5)].map((_, index) => (
+                            <Star
+                              key={index}
+                              className={`h-4 w-4 ${
+                                index < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        {review.text && (
+                          <p className="mt-3 text-sm text-muted-foreground">&quot;{review.text}&quot;</p>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                )}
               </div>
             </TabsContent>
 

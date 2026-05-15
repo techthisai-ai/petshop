@@ -17,11 +17,22 @@ import { cn } from '@/lib/utils'
 
 import { formatPrice } from '@/lib/utils'
 
+interface ChatProduct {
+  id: string
+  slug: string
+  name: string
+  subcategory?: string
+  price: number
+  originalPrice?: number
+  images: string[]
+  isNew?: boolean
+}
+
 interface Message {
   id: string
   type: 'user' | 'bot'
   content: string
-  products?: any
+  products?: ChatProduct[]
   timestamp: Date
 }
 
@@ -36,7 +47,7 @@ const quickActions = [
 ]
 
 // Bot responses based on keywords
-const getBotResponse = (query: string): { message: string; products?: any } => {
+const getBotResponse = (query: string): { message: string; products?: ChatProduct[] } => {
   const lowerQuery = query.toLowerCase()
   
   // Greetings
@@ -122,7 +133,7 @@ const getBotResponse = (query: string): { message: string; products?: any } => {
   }
 }
 
-const getCleanBotResponse = (query: string): { message: string; products?: any } => {
+const getCleanBotResponse = (query: string): { message: string; products?: ChatProduct[] } => {
   const lowerQuery = query.toLowerCase()
 
   if (lowerQuery.match(/^(hi|hello|hey|hola|namaste)/)) {
@@ -200,13 +211,13 @@ export function ChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  }, [])
 
   useEffect(() => {
     scrollToBottom()
-  }, [messages])
+  }, [messages, scrollToBottom])
 
   const handleSend = useCallback(() => {
     const query = inputValue.trim()

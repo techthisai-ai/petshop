@@ -88,7 +88,6 @@
       "description": "View aquarium fish collection",
       "url": "/shop/aquarium-fish",
       "icons": [{ "src": "/icons/fish.png", "sizes": "96x96", "type": "image/png" }]
-    },
-
+    }
   ]
 }

@@ -35,7 +35,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "Shop", href: "/shop", hasDropdown: true },
   { name: " Dogs & Cats", href: "/dogs-cats", highlight: true, isDogsCats: true },
-  { name: "Cloned Fish", href: "/shop/aquarium-fish" },
+  { name: "Fish", href: "/shop/aquarium-fish", isFish: true },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
 ];
