@@ -21,6 +21,8 @@ import { categories, searchProducts } from "@/lib/data";
 import { useStorefrontProducts } from "@/lib/storefrontProducts";
 import { formatPrice } from "@/lib/utils";
 
+const allCategories = categories;
+
 function ShopPageContent() {
   const searchParams = useSearchParams();
   const [gridCols, setGridCols] = useState<2 | 3 | 4 | 5>(4);
@@ -120,7 +122,7 @@ function ShopPageContent() {
           <AccordionTrigger>Categories</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-2">
-              {categories.map((category) => (
+              {allCategories.map((category) => (
                 <div key={category.id} className="flex items-center space-x-2">
                   <Checkbox
                     id={category.id}
@@ -346,7 +348,7 @@ function ShopPageContent() {
                       className="cursor-pointer hover:bg-muted"
                       onClick={() => toggleCategory(cat)}
                     >
-                      {categories.find((c) => c.id === cat)?.name}
+                      {allCategories.find((c) => c.id === cat)?.name}
                       <X className="w-3 h-3 ml-1" />
                     </Badge>
                   ))}

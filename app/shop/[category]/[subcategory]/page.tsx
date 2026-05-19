@@ -1,8 +1,7 @@
 import { categories } from "@/lib/data";
-import { dogsAndCatsCategory } from "@/lib/dogsAndCatsData";
 import SubcategoryPageClient from "@/components/shop/SubcategoryPageClient";
 
-const allCategories = [dogsAndCatsCategory, ...categories];
+const allCategories = categories;
 
 export function generateStaticParams() {
   const params: { category: string; subcategory: string }[] = [];
@@ -18,6 +17,7 @@ interface PageProps {
   params: { category: string; subcategory: string };
 }
 
-export default function SubcategoryPage({ params }: PageProps) {
-  return <SubcategoryPageClient categorySlug={params.category} subcategorySlug={params.subcategory} />;
+export default async function SubcategoryPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  return <SubcategoryPageClient categorySlug={resolvedParams.category} subcategorySlug={resolvedParams.subcategory} />;
 }

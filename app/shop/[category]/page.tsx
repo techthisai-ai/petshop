@@ -14,6 +14,7 @@ interface PageProps {
   params: { category: string };
 }
 
-export default function CategoryPage({ params }: PageProps) {
-  return <CategoryPageClient categorySlug={params.category} />;
+export default async function CategoryPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  return <CategoryPageClient categorySlug={resolvedParams.category} />;
 }

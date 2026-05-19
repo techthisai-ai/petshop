@@ -1,14 +1,9 @@
-const CACHE_NAME = "rinbow-aqua-v1.2.0";
+const CACHE_VERSION = "v3.0.0";
+const CACHE_NAME = "rinbow-aqua-" + CACHE_VERSION;
 const OFFLINE_URL = "/offline.html";
 
-const CORE_ASSETS = [
-  "/",
-  "/shop",
-  "/services",
-  "/about",
-  "/cart",
-  "/wishlist",
-  OFFLINE_URL,
+const STATIC_ASSETS = [
+  "/offline.html",
   "/manifest.json",
   "/favicon-16x16.png",
   "/apple-touch-icon.png",
@@ -16,99 +11,95 @@ const CORE_ASSETS = [
   "/icons/icon-512x512.png",
 ];
 
+// Install — cache only true static assets
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll(CORE_ASSETS).catch((error) => {
-        console.error("Rinbow Aqua: failed to cache core assets.", error);
-      })
+      cache.addAll(STATIC_ASSETS).catch(() => {})
     )
   );
-  self.skipWaiting();
 });
 
+// Activate — delete ALL old caches immediately
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames
-          .filter((cacheName) => cacheName !== CACHE_NAME)
-          .map((cacheName) => caches.delete(cacheName))
-      )
-    )
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
+
+// Helper — is this a Next.js RSC / internal request we must never cache?
+function shouldSkip(url) {
+  const p = url.pathname;
+  const s = url.search;
+
+  // RSC payload requests
+  if (s.includes("_rsc=")) return true;
+  // Next.js RSC .txt files
+  if (p.includes("__next") && p.endsWith(".txt")) return true;
+  // Next.js internal chunks (handled by browser cache headers)
+  if (p.startsWith("/_next/")) return true;
+  // Cross-origin
+  if (url.origin !== self.location.origin) return true;
+  // Non-GET (handled upstream)
+  return false;
+}
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
   const url = new URL(event.request.url);
 
-  if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith("/_next/")) return;
-  if (url.searchParams.has("v")) return;
+  if (shouldSkip(url)) return;
 
+  // Navigation — network first, cache fallback
   if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
-        .then((response) => {
-          if (response && response.ok) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+        .then((res) => {
+          if (res.ok) {
+            caches.open(CACHE_NAME).then((c) => c.put(event.request, res.clone()));
           }
-
-          return response;
+          return res;
         })
         .catch(() =>
-          caches.match(event.request).then((cachedPage) => cachedPage || caches.match(OFFLINE_URL))
+          caches.match(event.request).then((cached) => cached || caches.match(OFFLINE_URL))
         )
     );
     return;
   }
 
-  if (!/\.(?:css|js|png|jpg|jpeg|svg|webp|gif|ico|json)$/i.test(url.pathname)) {
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const networkResponse = fetch(event.request)
-        .then((response) => {
-          if (response && response.ok) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+  // Static file extensions — cache first, network fallback
+  if (/\.(?:css|js|png|jpg|jpeg|svg|webp|gif|ico|woff2?|ttf)$/i.test(url.pathname)) {
+    event.respondWith(
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(event.request).then((res) => {
+          if (res.ok) {
+            caches.open(CACHE_NAME).then((c) => c.put(event.request, res.clone()));
           }
-
-          return response;
-        })
-        .catch(() => {
-          return cachedResponse || new Response("Offline", { status: 503, statusText: "Offline" });
-        });
-
-      return cachedResponse || networkResponse;
-    })
-  );
+          return res;
+        }).catch(() => new Response("", { status: 503 }));
+      })
+    );
+  }
 });
 
 self.addEventListener("push", (event) => {
   const data = event.data?.json() || {};
-  const options = {
-    body: data.body || "New update from Rinbow Aqua!",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/icon-72x72.png",
-    vibrate: [100, 50, 100],
-    data: {
-      url: data.url || "/",
-    },
-  };
-
   event.waitUntil(
-    self.registration.showNotification(data.title || "Rinbow Aqua", options)
+    self.registration.showNotification(data.title || "Rainbow Aqua", {
+      body: data.body || "New update from Rainbow Aqua!",
+      icon: "/icons/icon-192x192.png",
+      badge: "/icons/icon-72x72.png",
+      data: { url: data.url || "/" },
+    })
   );
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  event.waitUntil(
-    clients.openWindow(event.notification.data.url || "/")
-  );
+  event.waitUntil(clients.openWindow(event.notification.data?.url || "/"));
 });

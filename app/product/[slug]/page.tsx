@@ -12,6 +12,7 @@ interface PageProps {
   params: { slug: string };
 }
 
-export default function ProductPage({ params }: PageProps) {
-  return <ProductPageClient slug={params.slug} />;
+export default async function ProductPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  return <ProductPageClient slug={resolvedParams.slug} />;
 }

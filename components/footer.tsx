@@ -29,10 +29,9 @@ const features = [
 const footerLinks = {
   shop: [
     { name: "Aquarium Fish", href: "/shop/aquarium-fish" },
-    { name: "Cloned Fish", href: "/shop/aquarium-fish/cloned-fish" },
-    { name: "Dogs", href: "/shop/dogs-cats/dog-food" },
-    { name: "Cats", href: "/shop/dogs-cats/cat-food" },
-
+    { name: "Cloned Fish", href: "/shop/aquarium-fish" },
+    { name: "Dogs", href: "/shop/dogs-cats" },
+    { name: "Cats", href: "/shop/dogs-cats" },
     { name: "Accessories", href: "/shop/accessories" },
   ],
   company: [
